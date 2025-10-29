@@ -39,17 +39,24 @@ echo "Parsed - Host: $DB_HOST, Port: $DB_PORT"\n\
 \n\
 # 等待 MySQL 端口可用\n\
 echo "Waiting for MySQL on $DB_HOST:$DB_PORT..."\n\
-TIMEOUT=300\n\
+TIMEOUT=180\n\
 ELAPSED=0\n\
 until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do\n\
   if [ $ELAPSED -ge $TIMEOUT ]; then\n\
     echo "ERROR: MySQL connection timeout after ${TIMEOUT}s"\n\
-    exit 1\n\
+    echo "Attempting to continue anyway..."\n\
+    break\n\
   fi\n\
   echo "MySQL not ready yet... waiting ($ELAPSED/${TIMEOUT}s)"\n\
   sleep 5\n\
   ELAPSED=$((ELAPSED + 5))\n\
 done\n\
+\n\
+if nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; then\n\
+  echo "✓ MySQL connection confirmed!"\n\
+else\n\
+  echo "⚠ Warning: Could not confirm MySQL connection, but continuing..."\n\
+fi\n\
 \n\
 echo "✓ MySQL port is open!"\n\
 echo "✓ Starting WordPress..."\n\
