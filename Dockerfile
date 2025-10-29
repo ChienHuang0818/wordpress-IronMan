@@ -17,20 +17,11 @@ COPY --chown=www-data:www-data ./wp-content/themes/hello-elementor /var/www/html
 # 设置正确的权限
 RUN chown -R www-data:www-data /var/www/html/wp-content/themes/hello-elementor
 
-# 创建统一的启动脚本（包含端口配置和 MySQL 等待）
+# 创建简化的启动脚本（只等待 MySQL）
 RUN echo '#!/bin/bash\n\
 set -e\n\
 \n\
 echo "=== WordPress Starting ==="\n\
-\n\
-# 配置 Apache 端口（Railway 动态端口支持）\n\
-if [ -n "$PORT" ]; then\n\
-  echo "Configuring Apache to listen on Railway port: $PORT"\n\
-  sed -i "s/Listen 80/Listen $PORT/g" /etc/apache2/ports.conf\n\
-  sed -i "s/:80/:$PORT/g" /etc/apache2/sites-available/000-default.conf\n\
-else\n\
-  echo "Using default port 80"\n\
-fi\n\
 \n\
 # 显示数据库环境变量\n\
 echo "DB Host: ${WORDPRESS_DB_HOST}"\n\
@@ -61,16 +52,14 @@ until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do\n\
 done\n\
 \n\
 echo "✓ MySQL port is open!"\n\
-echo "✓ Apache configured"\n\
-echo "Starting WordPress..."\n\
+echo "✓ Starting WordPress..."\n\
 \n\
-# 启动 Apache 和 WordPress\n\
+# 启动 Apache 和 WordPress（使用默认端口 80）\n\
 exec docker-entrypoint.sh apache2-foreground' > /usr/local/bin/start-wordpress.sh \
     && chmod +x /usr/local/bin/start-wordpress.sh
 
-# 暴露端口（Railway 会动态分配）
+# 暴露端口 80（Railway 会自动处理端口映射）
 EXPOSE 80
 
-# 使用统一启动脚本
+# 使用启动脚本
 CMD ["/usr/local/bin/start-wordpress.sh"]
-
