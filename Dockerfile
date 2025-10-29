@@ -1,7 +1,4 @@
-# 最简化的 WordPress Docker 镜像
+# 使用 WordPress 官方镜像 - 不做任何修改
 FROM wordpress:latest
 
-# 暴露端口
-EXPOSE 80
-
-# 使用官方默认配置，不做任何修改
+# 仅此而已 - 让 WordPress 官方镜像处理一切
