@@ -1,0 +1,492 @@
+/**
+ * Trainer List Styles
+ * 教练列表样式
+ * 
+ * @package HelloElementor
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   容器设置
+   ========================================================================== */
+
+.trainer-list-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* ==========================================================================
+   Grid 布局
+   ========================================================================== */
+
+.trainer-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .trainer-list-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+}
+
+/* ==========================================================================
+   教练卡片
+   ========================================================================== */
+
+.trainer-item {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.trainer-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================================
+   教练照片
+   ========================================================================== */
+
+.trainer-photo {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 比例 */
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.trainer-photo a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.trainer-photo img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.trainer-item:hover .trainer-photo img {
+  transform: scale(1.1);
+}
+
+/* 占位符图片样式 */
+.trainer-no-image .placeholder-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: transform 0.4s ease;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.trainer-item:hover .trainer-no-image .placeholder-image {
+  transform: scale(1.05);
+}
+
+.placeholder-icon {
+  font-size: 80px;
+  opacity: 0.8;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.placeholder-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================================================
+   教练内容
+   ========================================================================== */
+
+.trainer-content {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* 教练姓名 */
+.trainer-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+}
+
+.trainer-name a {
+  color: #2c3e50;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.trainer-name a:hover {
+  color: #667eea;
+}
+
+/* 专业领域标签 */
+.trainer-specialties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.specialty-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.trainer-item:hover .specialty-badge {
+  background: rgba(102, 126, 234, 0.2);
+  color: #5568d3;
+}
+
+/* 教练简介 */
+.trainer-excerpt {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.trainer-excerpt p {
+  margin: 0 0 10px 0;
+}
+
+.trainer-excerpt p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   教练信息
+   ========================================================================== */
+
+.trainer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.trainer-meta-item {
+  display: flex;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.trainer-meta-item .meta-icon {
+  font-size: 18px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.trainer-meta-item .meta-label {
+  font-weight: 600;
+  color: #333;
+  margin-right: 5px;
+}
+
+.trainer-meta-item .meta-value {
+  color: #666;
+}
+
+/* ==========================================================================
+   社交媒体链接
+   ========================================================================== */
+
+.trainer-social {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  color: #555;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.social-link.facebook {
+  background: #1877f2;
+  color: #fff;
+}
+
+.social-link.facebook:hover {
+  background: #0d65d9;
+}
+
+.social-link.instagram {
+  background: linear-gradient(
+    45deg,
+    #f09433 0%,
+    #e6683c 25%,
+    #dc2743 50%,
+    #cc2366 75%,
+    #bc1888 100%
+  );
+  color: #fff;
+}
+
+.social-link.instagram:hover {
+  opacity: 0.9;
+}
+
+.social-link.linkedin {
+  background: #0077b5;
+  color: #fff;
+}
+
+.social-link.linkedin:hover {
+  background: #005885;
+}
+
+.social-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ==========================================================================
+   查看详情按钮
+   ========================================================================== */
+
+.trainer-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-top: auto;
+}
+
+.trainer-button:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #653a8d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* ==========================================================================
+   空状态
+   ========================================================================== */
+
+.no-trainers {
+  text-align: center;
+  font-size: 18px;
+  color: #999;
+  padding: 60px 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+/* ==========================================================================
+   List 布局（替代 Grid）
+   ========================================================================== */
+
+.trainer-list-container.layout-list .trainer-list-grid {
+  grid-template-columns: 1fr;
+}
+
+.trainer-list-container.layout-list .trainer-item {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 30px;
+}
+
+.trainer-list-container.layout-list .trainer-photo {
+  padding-top: 100%;
+}
+
+@media (max-width: 768px) {
+  .trainer-list-container.layout-list .trainer-item {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   动画效果
+   ========================================================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.trainer-item {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.trainer-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.trainer-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.trainer-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.trainer-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.trainer-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.trainer-item:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+/* ==========================================================================
+   响应式设计
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .trainer-list-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+  }
+}
+
+@media (max-width: 640px) {
+  .trainer-list-container {
+    padding: 30px 15px;
+  }
+
+  .trainer-name {
+    font-size: 20px;
+  }
+
+  .trainer-content {
+    padding: 20px;
+  }
+
+  .specialty-badge {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  .trainer-button {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}
+
+/* ==========================================================================
+   打印样式
+   ========================================================================== */
+
+@media print {
+  .trainer-item {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  .trainer-button,
+  .trainer-social {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   深色模式支持
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .trainer-item {
+    background: #2c2c2c;
+    color: #e0e0e0;
+  }
+
+  .trainer-name a {
+    color: #e0e0e0;
+  }
+
+  .trainer-name a:hover {
+    color: #8b9bea;
+  }
+
+  .trainer-excerpt {
+    color: #b0b0b0;
+  }
+
+  .trainer-meta {
+    background: #1a1a1a;
+  }
+
+  .trainer-meta-item {
+    color: #b0b0b0;
+  }
+
+  .trainer-meta-item .meta-label {
+    color: #e0e0e0;
+  }
+
+  .no-trainers {
+    background: #2c2c2c;
+    color: #b0b0b0;
+  }
+}
