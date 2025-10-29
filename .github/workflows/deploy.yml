@@ -20,8 +20,8 @@ jobs:
           server: ftpupload.net
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /htdocs/
-          local-dir: ./
+          server-dir: /htdocs/wp-content/themes/hello-elementor/
+          local-dir: ./wp-content/themes/hello-elementor/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
@@ -30,9 +30,6 @@ jobs:
             **/.DS_Store
             **/Thumbs.db
             **/*.log
-            **/.github/**
-            **/wp-config.php
-            **/wp-content/uploads/**
 
       - name: ✅ 部署完成
         run: |
