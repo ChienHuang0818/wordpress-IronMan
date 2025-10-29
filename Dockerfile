@@ -58,9 +58,20 @@ echo "Starting Apache and WordPress..."\n\
 exec docker-entrypoint.sh apache2-foreground' > /usr/local/bin/custom-start.sh \
     && chmod +x /usr/local/bin/custom-start.sh
 
+# 创建端口配置脚本
+RUN echo '#!/bin/bash\n\
+# Railway 提供 PORT 环境变量\n\
+if [ -n "$PORT" ]; then\n\
+  echo "Configuring Apache to listen on port $PORT"\n\
+  sed -i "s/Listen 80/Listen $PORT/g" /etc/apache2/ports.conf\n\
+  sed -i "s/:80/:$PORT/g" /etc/apache2/sites-available/000-default.conf\n\
+fi\n\
+exec /usr/local/bin/custom-start.sh' > /usr/local/bin/configure-port.sh \
+    && chmod +x /usr/local/bin/configure-port.sh
+
 # 暴露端口
 EXPOSE 80
 
-# 使用自定义启动脚本
-CMD ["/usr/local/bin/custom-start.sh"]
+# 使用端口配置脚本
+CMD ["/usr/local/bin/configure-port.sh"]
 
