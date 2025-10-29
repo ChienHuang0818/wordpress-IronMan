@@ -17,13 +17,22 @@ COPY --chown=www-data:www-data ./wp-content/themes/hello-elementor /var/www/html
 # 设置正确的权限
 RUN chown -R www-data:www-data /var/www/html/wp-content/themes/hello-elementor
 
-# 创建增强的启动脚本
+# 创建统一的启动脚本（包含端口配置和 MySQL 等待）
 RUN echo '#!/bin/bash\n\
 set -e\n\
 \n\
 echo "=== WordPress Starting ==="\n\
 \n\
-# 显示环境变量（不显示密码）\n\
+# 配置 Apache 端口（Railway 动态端口支持）\n\
+if [ -n "$PORT" ]; then\n\
+  echo "Configuring Apache to listen on Railway port: $PORT"\n\
+  sed -i "s/Listen 80/Listen $PORT/g" /etc/apache2/ports.conf\n\
+  sed -i "s/:80/:$PORT/g" /etc/apache2/sites-available/000-default.conf\n\
+else\n\
+  echo "Using default port 80"\n\
+fi\n\
+\n\
+# 显示数据库环境变量\n\
 echo "DB Host: ${WORDPRESS_DB_HOST}"\n\
 echo "DB User: ${WORDPRESS_DB_USER}"\n\
 echo "DB Name: ${WORDPRESS_DB_NAME}"\n\
@@ -37,7 +46,7 @@ fi\n\
 \n\
 echo "Parsed - Host: $DB_HOST, Port: $DB_PORT"\n\
 \n\
-# 等待 MySQL 端口可用（使用 netcat）\n\
+# 等待 MySQL 端口可用\n\
 echo "Waiting for MySQL on $DB_HOST:$DB_PORT..."\n\
 TIMEOUT=300\n\
 ELAPSED=0\n\
@@ -52,26 +61,16 @@ until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do\n\
 done\n\
 \n\
 echo "✓ MySQL port is open!"\n\
-echo "Starting Apache and WordPress..."\n\
+echo "✓ Apache configured"\n\
+echo "Starting WordPress..."\n\
 \n\
-# 启动 Apache（使用 WordPress 官方镜像的默认命令）\n\
-exec docker-entrypoint.sh apache2-foreground' > /usr/local/bin/custom-start.sh \
-    && chmod +x /usr/local/bin/custom-start.sh
+# 启动 Apache 和 WordPress\n\
+exec docker-entrypoint.sh apache2-foreground' > /usr/local/bin/start-wordpress.sh \
+    && chmod +x /usr/local/bin/start-wordpress.sh
 
-# 创建端口配置脚本
-RUN echo '#!/bin/bash\n\
-# Railway 提供 PORT 环境变量\n\
-if [ -n "$PORT" ]; then\n\
-  echo "Configuring Apache to listen on port $PORT"\n\
-  sed -i "s/Listen 80/Listen $PORT/g" /etc/apache2/ports.conf\n\
-  sed -i "s/:80/:$PORT/g" /etc/apache2/sites-available/000-default.conf\n\
-fi\n\
-exec /usr/local/bin/custom-start.sh' > /usr/local/bin/configure-port.sh \
-    && chmod +x /usr/local/bin/configure-port.sh
-
-# 暴露端口
+# 暴露端口（Railway 会动态分配）
 EXPOSE 80
 
-# 使用端口配置脚本
-CMD ["/usr/local/bin/configure-port.sh"]
+# 使用统一启动脚本
+CMD ["/usr/local/bin/start-wordpress.sh"]
 
