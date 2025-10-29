@@ -4,11 +4,11 @@ FROM wordpress:latest
 # 设置工作目录
 WORKDIR /var/www/html
 
-# 安装必要的工具和 MySQL 客户端
+# 安装必要的工具
 RUN apt-get update && apt-get install -y \
     unzip \
     curl \
-    default-mysql-client \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 # 复制自定义主题
@@ -17,29 +17,50 @@ COPY --chown=www-data:www-data ./wp-content/themes/hello-elementor /var/www/html
 # 设置正确的权限
 RUN chown -R www-data:www-data /var/www/html/wp-content/themes/hello-elementor
 
-# Railway 使用 PORT 环境变量，但 WordPress 默认监听 80
-# 创建启动脚本来处理端口
+# 创建增强的启动脚本
 RUN echo '#!/bin/bash\n\
-# 使用 Railway 的 PORT 环境变量，如果未设置则默认 80\n\
-export APACHE_PORT=${PORT:-80}\n\
-sed -i "s/Listen 80/Listen $APACHE_PORT/g" /etc/apache2/ports.conf\n\
-sed -i "s/:80/:$APACHE_PORT/g" /etc/apache2/sites-available/000-default.conf\n\
+set -e\n\
 \n\
-# 等待 MySQL 可用\n\
-echo "Waiting for MySQL..."\n\
-until mysql -h"$WORDPRESS_DB_HOST" -u"$WORDPRESS_DB_USER" -p"$WORDPRESS_DB_PASSWORD" "$WORDPRESS_DB_NAME" -e "SELECT 1" >/dev/null 2>&1; do\n\
-  echo "MySQL is unavailable - sleeping"\n\
-  sleep 2\n\
+echo "=== WordPress Starting ==="\n\
+\n\
+# 显示环境变量（不显示密码）\n\
+echo "DB Host: ${WORDPRESS_DB_HOST}"\n\
+echo "DB User: ${WORDPRESS_DB_USER}"\n\
+echo "DB Name: ${WORDPRESS_DB_NAME}"\n\
+\n\
+# 解析主机和端口\n\
+DB_HOST=$(echo $WORDPRESS_DB_HOST | cut -d: -f1)\n\
+DB_PORT=$(echo $WORDPRESS_DB_HOST | cut -d: -f2)\n\
+if [ "$DB_PORT" == "$DB_HOST" ]; then\n\
+  DB_PORT=3306\n\
+fi\n\
+\n\
+echo "Parsed - Host: $DB_HOST, Port: $DB_PORT"\n\
+\n\
+# 等待 MySQL 端口可用（使用 netcat）\n\
+echo "Waiting for MySQL on $DB_HOST:$DB_PORT..."\n\
+TIMEOUT=300\n\
+ELAPSED=0\n\
+until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do\n\
+  if [ $ELAPSED -ge $TIMEOUT ]; then\n\
+    echo "ERROR: MySQL connection timeout after ${TIMEOUT}s"\n\
+    exit 1\n\
+  fi\n\
+  echo "MySQL not ready yet... waiting ($ELAPSED/${TIMEOUT}s)"\n\
+  sleep 5\n\
+  ELAPSED=$((ELAPSED + 5))\n\
 done\n\
-echo "MySQL is up - starting WordPress"\n\
 \n\
-# 启动 Apache\n\
-exec apache2-foreground' > /usr/local/bin/start.sh \
-    && chmod +x /usr/local/bin/start.sh
+echo "✓ MySQL port is open!"\n\
+echo "Starting Apache and WordPress..."\n\
+\n\
+# 启动 Apache（使用 WordPress 官方镜像的默认命令）\n\
+exec docker-entrypoint.sh apache2-foreground' > /usr/local/bin/custom-start.sh \
+    && chmod +x /usr/local/bin/custom-start.sh
 
-# 暴露端口（Railway 会动态分配）
-EXPOSE ${PORT:-80}
+# 暴露端口
+EXPOSE 80
 
 # 使用自定义启动脚本
-CMD ["/usr/local/bin/start.sh"]
+CMD ["/usr/local/bin/custom-start.sh"]
 
