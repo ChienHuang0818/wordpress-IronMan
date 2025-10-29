@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: iron-man-fitness
+    env: docker
+    region: singapore
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: WORDPRESS_DB_HOST
+        sync: false
+      - key: WORDPRESS_DB_USER
+        sync: false
+      - key: WORDPRESS_DB_PASSWORD
+        sync: false
+      - key: WORDPRESS_DB_NAME
+        sync: false
+      - key: WORDPRESS_TABLE_PREFIX
+        value: wp_
+      - key: WORDPRESS_DEBUG
+        value: false
+
