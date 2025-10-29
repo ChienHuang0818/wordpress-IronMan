@@ -18,4 +18,3 @@ services:
         value: wp_
       - key: WORDPRESS_DEBUG
         value: false
-
