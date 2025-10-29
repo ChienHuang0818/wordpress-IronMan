@@ -1,0 +1,43 @@
+name: 🚀 Deploy to InfinityFree
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: 📦 Deploy WordPress
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚚 获取代码
+        uses: actions/checkout@v3
+
+      - name: 📂 同步文件到 FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ftpupload.net
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /htdocs/
+          local-dir: ./
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
+            **/Thumbs.db
+            **/*.log
+            **/.github/**
+            **/wp-config.php
+            **/wp-content/uploads/**
+
+      - name: ✅ 部署完成
+        run: |
+          echo "=========================================="
+          echo "✅ 部署成功！"
+          echo "🌐 网站: http://iron-man.wuaze.com"
+          echo "⏰ 部署时间: $(date)"
+          echo "=========================================="

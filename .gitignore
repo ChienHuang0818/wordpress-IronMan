@@ -1,0 +1,59 @@
+# WordPress 核心文件（不需要版本控制）
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/xmlrpc.php
+/readme.html
+/license.txt
+/index.php
+
+# 配置文件（包含敏感信息）
+wp-config.php
+wp-config-sample.php
+
+# 上传的媒体文件（太大，不适合 Git）
+/wp-content/uploads/
+
+# 缓存和临时文件
+/wp-content/cache/
+/wp-content/backup*/
+/wp-content/upgrade/
+/wp-content/ai1wm-backups/
+*.log
+
+# 插件（只保留自定义开发的）
+/wp-content/plugins/
+!/wp-content/plugins/.gitkeep
+
+# 主题（只保留 hello-elementor 自定义主题）
+/wp-content/themes/twentytwenty*/
+!/wp-content/themes/hello-elementor/
+
+# WordPress 语言文件
+/wp-content/languages/
+
+# Node modules 和依赖
+node_modules/
+vendor/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+._*
+
+# IDE 配置
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 临时文件
+*.tmp
+*.bak
+*~
+
+# 数据库备份
+*.sql
+*.sql.gz
+*.sql.zip
+
