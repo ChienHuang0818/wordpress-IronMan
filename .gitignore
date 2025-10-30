@@ -1,0 +1,88 @@
+# WordPress 核心文件 - 不上传
+/index.php
+/license.txt
+/readme.html
+/wp-activate.php
+/wp-blog-header.php
+/wp-comments-post.php
+/wp-config-sample.php
+/wp-cron.php
+/wp-links-opml.php
+/wp-load.php
+/wp-login.php
+/wp-mail.php
+/wp-settings.php
+/wp-signup.php
+/wp-trackback.php
+/xmlrpc.php
+/wp-admin/
+/wp-includes/
+
+# wp-content 中的核心内容
+/wp-content/index.php
+/wp-content/languages/
+/wp-content/upgrade/
+/wp-content/cache/
+
+# 第三方插件 - 不上传（在服务器上安装）
+/wp-content/plugins/akismet/
+/wp-content/plugins/contact-form-7/
+/wp-content/plugins/yoast-seo/
+/wp-content/plugins/wordfence/
+/wp-content/plugins/jetpack/
+
+
+# 配置文件 - 敏感信息
+wp-config.php
+.htaccess
+
+# 上传的文件 - 体积大
+/wp-content/uploads/
+
+# 日志和缓存
+*.log
+/logs/
+/tmp/
+error_log
+debug.log
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node modules
+node_modules/
+npm-debug.log
+
+# 环境变量
+.env
+.env.local
+
+# 备份文件
+*.sql
+*.sql.gz
+*.bak
+/wp-content/backup*/
+
+# Docker 相关（本地测试用）
+docker-compose.override.yml
+
+/wp-content/
+/wp-content/updraft/
+/wp-content/upgrade/
+*.zip
+*.tar
+*.tar.gz
