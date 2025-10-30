@@ -268,26 +268,16 @@ if ( ! function_exists( 'hello_elementor_body_open' ) ) {
 	}
 }
 
-// // 添加文字逐字跳出動畫腳本
-// add_action( 'wp_enqueue_scripts', function() {
-// 	// 載入文字動畫 JavaScript
-// 	wp_enqueue_script(
-// 		'typing-animation',
-// 		HELLO_THEME_SCRIPTS_URL . 'typing-animation.js',
-// 		[], // 不依賴其他腳本
-// 		wp_get_environment_type() === 'production' ? '1.0.0' : time(),
-// 		true // 在頁面底部載入
-// 	);
-	
-// 	// 載入自定義 Header JavaScript
-// 	wp_enqueue_script(
-// 		'custom-header',
-// 		HELLO_THEME_SCRIPTS_URL . 'custom-header.js',
-// 		[],
-// 		wp_get_environment_type() === 'production' ? '1.0.0' : time(),
-// 		true
-// 	);
-// }, 25);
+// 添加自定義 Header JavaScript (手機版導航切換功能)
+add_action( 'wp_enqueue_scripts', function() {
+	wp_enqueue_script(
+		'custom-header-js',
+		get_template_directory_uri() . '/custom-templates/header/custom-header.js',
+		[], // 不依賴其他腳本
+		HELLO_ELEMENTOR_VERSION,
+		true // 在頁面底部載入
+	);
+}, 25);
 
 // Header Template
 add_action( 'wp_body_open', function() {
