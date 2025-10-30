@@ -1,0 +1,508 @@
+/* Professional Gym-Style Meal Plan Generator */
+/* Black & Red Color Scheme */
+
+:root {
+  --primary-black: #0a0a0a;
+  --secondary-black: #1a1a1a;
+  --accent-black: #2a2a2a;
+  --primary-red: #dc2626;
+  --secondary-red: #ef4444;
+  --accent-red: #f87171;
+  --text-white: #ffffff;
+  --text-gray: #d1d5db;
+  --text-light-gray: #9ca3af;
+  --border-gray: #374151;
+  --shadow-dark: rgba(0, 0, 0, 0.5);
+  --shadow-red: rgba(220, 38, 38, 0.3);
+}
+
+.mpg-card {
+  max-width: 1200px;
+  margin: 40px 10px;
+  background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px var(--shadow-dark), 0 0 0 1px var(--border-gray);
+  border: 2px solid var(--primary-red);
+  position: relative;
+  overflow: hidden;
+}
+
+.mpg-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-red), var(--secondary-red), var(--accent-red));
+}
+
+.mpg-title {
+  font-size: 32px;
+  font-weight: 900;
+  margin: 0 0 30px;
+  color: var(--text-white);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+.mpg-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: var(--primary-red);
+  border-radius: 2px;
+}
+
+.mpg-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.mpg-row {
+  display: grid;
+  gap: 12px;
+}
+
+.mpg-2col {
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.mpg-3col {
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.mpg-inline {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.mpg-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.mpg-hint {
+  color: var(--text-light-gray);
+  font-size: 13px;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+/* Form Elements */
+.mpg-row label {
+  color: var(--text-white);
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 8px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mpg-row input[type="text"],
+.mpg-row input[type="number"],
+.mpg-row select {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid var(--border-gray);
+  border-radius: 12px;
+  background: var(--accent-black);
+  color: var(--text-white);
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.mpg-row input[type="text"]:focus,
+.mpg-row input[type="number"]:focus,
+.mpg-row select:focus {
+  outline: none;
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px var(--shadow-red);
+  background: var(--secondary-black);
+}
+
+.mpg-row input[type="text"]::placeholder,
+.mpg-row input[type="number"]::placeholder {
+  color: var(--text-light-gray);
+}
+
+/* Radio Buttons */
+.mpg-inline label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-gray);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+  padding: 12px 20px;
+  border: 2px solid var(--border-gray);
+  border-radius: 10px;
+  background: var(--accent-black);
+  transition: all 0.3s ease;
+  margin-bottom: 0;
+}
+
+.mpg-inline label:hover {
+  border-color: var(--primary-red);
+  background: var(--secondary-black);
+  color: var(--text-white);
+}
+
+.mpg-inline input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--primary-red);
+}
+
+.mpg-inline input[type="radio"]:checked + * {
+  color: var(--primary-red);
+  font-weight: 700;
+}
+
+.mpg-inline label:has(input[type="radio"]:checked) {
+  border-color: var(--primary-red);
+  background: var(--primary-red);
+  color: var(--text-white);
+  box-shadow: 0 0 20px var(--shadow-red);
+}
+
+/* Checkboxes */
+.mpg-checkboxes label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-gray);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+  padding: 15px 20px;
+  border: 2px solid var(--border-gray);
+  border-radius: 10px;
+  background: var(--accent-black);
+  transition: all 0.3s ease;
+  margin-bottom: 0;
+}
+
+.mpg-checkboxes label:hover {
+  border-color: var(--primary-red);
+  background: var(--secondary-black);
+  color: var(--text-white);
+}
+
+.mpg-checkboxes input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-red);
+}
+
+.mpg-checkboxes label:has(input[type="checkbox"]:checked) {
+  border-color: var(--primary-red);
+  background: var(--primary-red);
+  color: var(--text-white);
+  box-shadow: 0 0 15px var(--shadow-red);
+}
+
+/* Submit Button */
+.mpg-btn {
+  width: 100%;
+  padding: 20px 30px;
+  border: none;
+  border-radius: 15px;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text-white);
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+  cursor: pointer;
+  box-shadow: 0 10px 30px var(--shadow-red);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.mpg-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.mpg-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px var(--shadow-red);
+  background: linear-gradient(135deg, var(--secondary-red) 0%, var(--accent-red) 100%);
+}
+
+.mpg-btn:hover::before {
+  left: 100%;
+}
+
+.mpg-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px var(--shadow-red);
+}
+
+/* Results Section */
+.mpg-result {
+  margin-top: 40px;
+  padding: 30px;
+  background: var(--accent-black);
+  border-radius: 15px;
+  border: 2px solid var(--border-gray);
+}
+
+.mpg-result h3 {
+  color: var(--text-white);
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.mpg-target {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  background: var(--primary-black);
+  color: var(--text-white);
+  padding: 25px;
+  border-radius: 15px;
+  border: 2px solid var(--primary-red);
+  margin-bottom: 30px;
+}
+
+.mpg-target div {
+  text-align: center;
+  padding: 15px;
+  background: var(--secondary-black);
+  border-radius: 10px;
+  border: 1px solid var(--border-gray);
+}
+
+.mpg-target strong {
+  display: block;
+  color: var(--primary-red);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.mpg-target span {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-white);
+}
+
+.mpg-days {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.mpg-day {
+  border: 2px solid var(--border-gray);
+  border-radius: 15px;
+  padding: 25px;
+  background: var(--secondary-black);
+  transition: all 0.3s ease;
+}
+
+.mpg-day:hover {
+  border-color: var(--primary-red);
+  box-shadow: 0 5px 20px var(--shadow-red);
+}
+
+.mpg-day h4 {
+  margin: 0 0 15px;
+  color: var(--primary-red);
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--primary-red);
+  padding-bottom: 10px;
+}
+
+.mpg-macros,
+.mpg-total {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.mpg-total {
+  color: var(--text-white);
+  font-weight: 700;
+  background: var(--primary-red);
+  padding: 8px 15px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 15px;
+}
+
+/* Consent Checkbox */
+.mpg-consent label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text-gray);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+  padding: 20px;
+  border: 2px solid var(--border-gray);
+  border-radius: 12px;
+  background: var(--accent-black);
+  transition: all 0.3s ease;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.mpg-consent label:hover {
+  border-color: var(--primary-red);
+  background: var(--secondary-black);
+  color: var(--text-white);
+}
+
+.mpg-consent input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--primary-red);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.mpg-consent label:has(input[type="checkbox"]:checked) {
+  border-color: var(--primary-red);
+  background: var(--primary-red);
+  color: var(--text-white);
+  box-shadow: 0 0 20px var(--shadow-red);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mpg-card {
+    margin: 20px;
+    padding: 25px;
+  }
+
+  .mpg-title {
+    font-size: 24px;
+  }
+
+  .mpg-2col,
+  .mpg-3col {
+    grid-template-columns: 1fr;
+  }
+
+  .mpg-target {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mpg-inline {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mpg-checkboxes {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .mpg-card {
+    margin: 10px;
+    padding: 20px;
+  }
+
+  .mpg-title {
+    font-size: 20px;
+  }
+
+  .mpg-target {
+    grid-template-columns: 1fr;
+  }
+
+  .mpg-btn {
+    padding: 18px 25px;
+    font-size: 16px;
+  }
+}
+
+/* Loading Animation */
+.mpg-loading {
+  display: none;
+  text-align: center;
+  padding: 40px;
+}
+
+.mpg-loading.show {
+  display: block;
+}
+
+.mpg-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-gray);
+  border-top: 4px solid var(--primary-red);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.mpg-loading-text {
+  color: var(--text-white);
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* my account navigation */
+.gym-account-navigation {
+  background: #111217;
+  border: 1px solid #112eb0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  color: #eaecef;
+}
