@@ -10,16 +10,10 @@ RUN apt-get update && apt-get install -y \
     netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
-# 📦 复制自定义主题到容器中
-COPY --chown=www-data:www-data ./wp-content/themes/hello-elementor /var/www/html/wp-content/themes/hello-elementor
-
 # 仅复制 WooCommerce、Elementor 插件与媒体图片
 COPY --chown=www-data:www-data ./wp-content/plugins/woocommerce /var/www/html/wp-content/plugins/woocommerce
 COPY --chown=www-data:www-data ./wp-content/plugins/elementor /var/www/html/wp-content/plugins/elementor
 COPY --chown=www-data:www-data ./wp-content/uploads /var/www/html/wp-content/uploads
-
-# 设置正确的权限
-RUN chown -R www-data:www-data /var/www/html/wp-content/themes/hello-elementor
 
 # 创建统一的启动脚本（包含端口配置和 MySQL 等待）
 RUN echo '#!/bin/bash\n\
@@ -82,3 +76,5 @@ EXPOSE 80
 
 # 使用 ENTRYPOINT 确保启动脚本被执行
 ENTRYPOINT ["/usr/local/bin/start-wordpress.sh"]
+
+ 
