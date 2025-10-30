@@ -25,8 +25,6 @@
 /wp-content/cache/
 
 # 第三方插件 - 不上传（在服务器上安装）
-/wp-content/plugins/elementor/
-/wp-content/plugins/woocommerce/
 /wp-content/plugins/akismet/
 /wp-content/plugins/contact-form-7/
 /wp-content/plugins/yoast-seo/
@@ -39,9 +37,6 @@
 # 配置文件 - 敏感信息
 wp-config.php
 .htaccess
-
-# 上传的文件 - 体积大
-/wp-content/uploads/
 
 # 日志和缓存
 *.log
