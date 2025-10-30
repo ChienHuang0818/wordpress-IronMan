@@ -10,10 +10,14 @@ RUN apt-get update && apt-get install -y \
     netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
-# 仅复制 WooCommerce、Elementor 插件与媒体图片
+# 仅复制 WooCommerce、Elementor 插件（uploads 由 Volume 掛載）
 COPY --chown=www-data:www-data ./wp-content/plugins/woocommerce /var/www/html/wp-content/plugins/woocommerce
 COPY --chown=www-data:www-data ./wp-content/plugins/elementor /var/www/html/wp-content/plugins/elementor
-COPY --chown=www-data:www-data ./wp-content/uploads /var/www/html/wp-content/uploads
+
+# 確保 uploads 目錄存在並設置權限（實際檔案由外部 Volume 提供）
+RUN mkdir -p /var/www/html/wp-content/uploads \
+    && chown -R www-data:www-data /var/www/html/wp-content/uploads
+
 
 # 创建统一的启动脚本（包含端口配置和 MySQL 等待）
 RUN echo '#!/bin/bash\n\
