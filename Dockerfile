@@ -14,10 +14,6 @@ RUN apt-get update && apt-get install -y \
 COPY --chown=www-data:www-data ./wp-content/plugins/woocommerce /var/www/html/wp-content/plugins/woocommerce
 COPY --chown=www-data:www-data ./wp-content/plugins/elementor /var/www/html/wp-content/plugins/elementor
 
-# 確保 uploads 目錄存在並設置權限（實際檔案由外部 Volume 提供）
-RUN mkdir -p /var/www/html/wp-content/uploads \
-    && chown -R www-data:www-data /var/www/html/wp-content/uploads
-
 
 # 创建统一的启动脚本（包含端口配置和 MySQL 等待）
 RUN echo '#!/bin/bash\n\
@@ -47,6 +43,11 @@ if [ "$DB_PORT" == "$DB_HOST" ]; then\n\
 fi\n\
 \n\
 echo "Parsed - Host: $DB_HOST, Port: $DB_PORT"\n\
+\n\
+# 準備 uploads 目錄與權限（Volume 掛載後權限常被覆蓋，需要在啟動時處理）\n\
+mkdir -p /var/www/html/wp-content/uploads\n\
+chown -R www-data:www-data /var/www/html/wp-content/uploads /var/www/html/wp-content/plugins\n\
+chmod -R u+rwX,go-rwx /var/www/html/wp-content/uploads /var/www/html/wp-content/plugins\n\
 \n\
 # 等待 MySQL 端口可用\n\
 echo "Waiting for MySQL on $DB_HOST:$DB_PORT..."\n\
