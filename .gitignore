@@ -31,12 +31,13 @@
 /wp-content/plugins/wordfence/
 /wp-content/plugins/jetpack/
 
-# 主题 - 只保留自定义主题
-/wp-content/themes/twentytwenty*/
 
 # 配置文件 - 敏感信息
 wp-config.php
 .htaccess
+
+# 上传的文件 - 体积大
+/wp-content/uploads/
 
 # 日志和缓存
 *.log

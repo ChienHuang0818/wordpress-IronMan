@@ -1,5 +1,5 @@
 # 使用 WordPress 官方镜像
-FROM wordpress:latest
+FROM wordpress:php8.2-apache
 
 WORKDIR /var/www/html
 
@@ -13,25 +13,7 @@ RUN apt-get update && apt-get install -y \
 # 仅复制 WooCommerce、Elementor 插件（uploads 由 Volume 掛載）
 COPY --chown=www-data:www-data ./wp-content/plugins/woocommerce /var/www/html/wp-content/plugins/woocommerce
 COPY --chown=www-data:www-data ./wp-content/plugins/elementor /var/www/html/wp-content/plugins/elementor
-
-# 提供一個最小的 hello-elementor 佈景主題占位（子主題，父主題為 twentytwentyfive）
-RUN set -eux; \
-    mkdir -p /var/www/html/wp-content/themes/hello-elementor; \
-    printf '%s\n' \
-      '/*' \
-      'Theme Name: Hello Elementor (Placeholder)' \
-      'Template: twentytwentyfive' \
-      'Version: 0.0.1' \
-      '*/' \
-    > /var/www/html/wp-content/themes/hello-elementor/style.css; \
-    printf '%s\n' \
-      '<?php' \
-      'add_action("wp_enqueue_scripts", function () {' \
-      '  wp_enqueue_style("parent-style", get_template_directory_uri() . "/style.css", [], null);' \
-      '});' \
-    > /var/www/html/wp-content/themes/hello-elementor/functions.php; \
-    chown -R www-data:www-data /var/www/html/wp-content/themes/hello-elementor
-
+COPY --chown=www-data:www-data ./wp-content/themes/hello-elementor /var/www/html/wp-content/themes/hello-elementor
 
 # 创建统一的启动脚本（包含端口配置和 MySQL 等待）
 RUN echo '#!/bin/bash\n\
