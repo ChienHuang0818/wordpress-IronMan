@@ -80,7 +80,15 @@ npm-debug.log
 # Docker 相关（本地测试用）
 docker-compose.override.yml
 
-/wp-content/
+# 預設忽略整個 wp-content（避免上傳備份/上傳檔案）
+/wp-content/*
+
+# 但允許自定義主題
+!/wp-content/themes/
+/wp-content/themes/*
+!/wp-content/themes/hello-elementor/
+
+# 繼續排除其他大型檔案
 /wp-content/updraft/
 /wp-content/upgrade/
 *.zip
