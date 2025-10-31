@@ -10,10 +10,14 @@ RUN apt-get update && apt-get install -y \
     netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
-# 仅复制 WooCommerce、Elementor 插件（uploads 由 Volume 掛載）
-# COPY --chown=www-data:www-data ./wp-content/plugins/woocommerce /var/www/html/wp-content/plugins/woocommerce
-# COPY --chown=www-data:www-data ./wp-content/plugins/elementor /var/www/html/wp-content/plugins/elementor
+# 复制 WooCommerce、Elementor 插件與自定義主題（如已推送到 Git）
+COPY --chown=www-data:www-data ./wp-content/plugins/woocommerce /var/www/html/wp-content/plugins/woocommerce
+COPY --chown=www-data:www-data ./wp-content/plugins/elementor /var/www/html/wp-content/plugins/elementor
 COPY --chown=www-data:www-data ./wp-content/themes/hello-elementor /var/www/html/wp-content/themes/hello-elementor
+
+# 健康檢查：Railway 會依此自動重啟不健康容器
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -fsS http://localhost/wp-json/ || exit 1
 
 # 创建统一的启动脚本（包含端口配置和 MySQL 等待）
 RUN echo '#!/bin/bash\n\
@@ -24,8 +28,8 @@ echo "=== WordPress Starting ==="\n\
 # 配置 Apache 端口（Railway 动态端口支持）\n\
 if [ -n "$PORT" ]; then\n\
   echo "Configuring Apache to listen on Railway port: $PORT"\n\
-  sed -i "s/Listen 80/Listen $PORT/g" /etc/apache2/ports.conf\n\
-  sed -i "s/:80/:$PORT/g" /etc/apache2/sites-available/000-default.conf\n\
+  sed -i "s/^Listen .*/Listen $PORT/" /etc/apache2/ports.conf\n\
+  sed -i "s/<VirtualHost \*:.*>/<VirtualHost *:$PORT>/" /etc/apache2/sites-available/000-default.conf\n\
 else\n\
   echo "Using default port 80"\n\
 fi\n\
@@ -41,13 +45,12 @@ DB_PORT=$(echo $WORDPRESS_DB_HOST | cut -d: -f2)\n\
 if [ "$DB_PORT" == "$DB_HOST" ]; then\n\
   DB_PORT=3306\n\
 fi\n\
-\n\
 echo "Parsed - Host: $DB_HOST, Port: $DB_PORT"\n\
 \n\
 # 準備 uploads 目錄與權限（Volume 掛載後權限常被覆蓋，需要在啟動時處理）\n\
 mkdir -p /var/www/html/wp-content/uploads\n\
-chown -R www-data:www-data /var/www/html/wp-content/uploads /var/www/html/wp-content/plugins\n\
-chmod -R u+rwX,go-rwx /var/www/html/wp-content/uploads /var/www/html/wp-content/plugins\n\
+chown -R www-data:www-data /var/www/html/wp-content/uploads /var/www/html/wp-content/plugins /var/www/html/wp-content/themes\n\
+chmod -R u+rwX,go-rwx /var/www/html/wp-content/uploads /var/www/html/wp-content/plugins /var/www/html/wp-content/themes\n\
 \n\
 # 等待 MySQL 端口可用\n\
 echo "Waiting for MySQL on $DB_HOST:$DB_PORT..."\n\
