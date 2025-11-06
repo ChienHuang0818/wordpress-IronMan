@@ -1,6 +1,6 @@
 /**
  * Program List JavaScript
- * 训练项目列表交互功能
+ * Training program list interactive functionality
  *
  * @package HelloElementor
  * @since 1.0.0
@@ -9,71 +9,71 @@
 (function ($) {
   "use strict";
 
-  // 当 DOM 准备好时执行
+  // Execute when DOM is ready
   $(document).ready(function () {
-    // 初始化课程列表
+    // Initialize program list
     initProgramList();
 
-    // 添加筛选功能（如果需要）
+    // Add filter functionality (if needed)
     initProgramFilters();
 
-    // 添加加载更多功能（如果需要）
+    // Add load more functionality (if needed)
     initLoadMore();
   });
 
   /**
-   * 初始化课程列表
+   * Initialize program list
    */
   function initProgramList() {
     const $programItems = $(".program-item");
 
-    // 添加淡入动画（备用方案，CSS 已有动画）
+    // Add fade-in animation (fallback, CSS already has animation)
     $programItems.each(function (index) {
       const $item = $(this);
 
-      // 懒加载图片（可选）
+      // Lazy load images (optional)
       const $img = $item.find(".program-thumbnail img");
       if ($img.length && $img.attr("data-src")) {
         loadImage($img);
       }
 
-      // 添加点击统计（可选）
+      // Add click tracking (optional)
       $item.find(".program-button, .program-title a").on("click", function () {
         trackProgramClick($item.data("program-id"));
       });
     });
 
-    // 添加滚动动画效果
+    // Add scroll animation effect
     observePrograms();
   }
 
   /**
-   * 初始化筛选功能
+   * Initialize filter functionality
    */
   function initProgramFilters() {
-    // 难度筛选
+    // Difficulty filter
     $(".program-filter-difficulty").on("click", function (e) {
       e.preventDefault();
       const difficulty = $(this).data("difficulty");
       filterByDifficulty(difficulty);
 
-      // 更新活动状态
+      // Update active state
       $(".program-filter-difficulty").removeClass("active");
       $(this).addClass("active");
     });
 
-    // 分类筛选
+    // Category filter
     $(".program-filter-category").on("click", function (e) {
       e.preventDefault();
       const category = $(this).data("category");
       filterByCategory(category);
 
-      // 更新活动状态
+      // Update active state
       $(".program-filter-category").removeClass("active");
       $(this).addClass("active");
     });
 
-    // 重置筛选
+    // Reset filters
     $(".program-filter-reset").on("click", function (e) {
       e.preventDefault();
       resetFilters();
@@ -81,7 +81,7 @@
   }
 
   /**
-   * 按难度筛选
+   * Filter by difficulty
    */
   function filterByDifficulty(difficulty) {
     const $programItems = $(".program-item");
@@ -104,7 +104,7 @@
   }
 
   /**
-   * 按分类筛选
+   * Filter by category
    */
   function filterByCategory(category) {
     const $programItems = $(".program-item");
@@ -127,7 +127,7 @@
   }
 
   /**
-   * 重置筛选
+   * Reset filters
    */
   function resetFilters() {
     $(".program-item").fadeIn(300);
@@ -136,7 +136,7 @@
   }
 
   /**
-   * 初始化加载更多功能
+   * Initialize load more functionality
    */
   function initLoadMore() {
     const $loadMoreBtn = $(".program-load-more");
@@ -150,10 +150,10 @@
       const page = parseInt($btn.data("page")) || 1;
       const nextPage = page + 1;
 
-      // 显示加载状态
-      $btn.addClass("loading").text("加载中...");
+      // Show loading state
+      $btn.addClass("loading").text("Loading...");
 
-      // AJAX 请求
+      // AJAX request
       $.ajax({
         url: ProgramListConfig.ajaxUrl,
         type: "POST",
@@ -164,38 +164,38 @@
         },
         success: function (response) {
           if (response.success && response.data.html) {
-            // 添加新项目
+            // Add new items
             const $newItems = $(response.data.html);
             $(".program-list-grid").append($newItems);
 
-            // 更新页码
+            // Update page number
             $btn.data("page", nextPage);
 
-            // 如果没有更多了
+            // If no more items
             if (!response.data.has_more) {
-              $btn.text("没有更多了").prop("disabled", true);
+              $btn.text("No More Programs").prop("disabled", true);
             } else {
-              $btn.removeClass("loading").text("加载更多");
+              $btn.removeClass("loading").text("Load More");
             }
 
-            // 初始化新项目
+            // Initialize new items
             observePrograms();
           } else {
-            $btn.text("加载失败").prop("disabled", true);
+            $btn.text("Load Failed").prop("disabled", true);
           }
         },
         error: function () {
-          $btn.removeClass("loading").text("加载失败");
+          $btn.removeClass("loading").text("Load Failed");
         },
       });
     });
   }
 
   /**
-   * 观察程序项目（Intersection Observer）
+   * Observe program items (Intersection Observer)
    */
   function observePrograms() {
-    // 检查浏览器支持
+    // Check browser support
     if (!("IntersectionObserver" in window)) return;
 
     const options = {
@@ -212,14 +212,14 @@
       });
     }, options);
 
-    // 观察所有项目
+    // Observe all items
     $(".program-item").each(function () {
       observer.observe(this);
     });
   }
 
   /**
-   * 懒加载图片
+   * Lazy load images
    */
   function loadImage($img) {
     const src = $img.attr("data-src");
@@ -233,12 +233,12 @@
   }
 
   /**
-   * 追踪项目点击（用于分析）
+   * Track program clicks (for analytics)
    */
   function trackProgramClick(programId) {
     if (!programId) return;
 
-    // 发送到 Google Analytics（如果已安装）
+    // Send to Google Analytics (if installed)
     if (typeof gtag !== "undefined") {
       gtag("event", "program_click", {
         event_category: "Programs",
@@ -247,7 +247,7 @@
       });
     }
 
-    // 发送到自定义追踪端点（可选）
+    // Send to custom tracking endpoint (optional)
     $.ajax({
       url: ProgramListConfig.ajaxUrl,
       type: "POST",
@@ -260,7 +260,7 @@
   }
 
   /**
-   * 平滑滚动到元素
+   * Smooth scroll to element
    */
   function smoothScrollTo($element, offset = 100) {
     if (!$element.length) return;
@@ -274,7 +274,7 @@
   }
 
   /**
-   * 添加到收藏（如果需要）
+   * Add to favorites (if needed)
    */
   function addToFavorites(programId) {
     $.ajax({
@@ -287,14 +287,14 @@
       },
       success: function (response) {
         if (response.success) {
-          alert("已添加到收藏！");
+          alert("Added to favorites!");
         }
       },
     });
   }
 
   /**
-   * 搜索功能
+   * Search functionality
    */
   function initSearch() {
     const $searchInput = $(".program-search-input");
@@ -315,7 +315,7 @@
   }
 
   /**
-   * 搜索项目
+   * Search programs
    */
   function searchPrograms(query) {
     const $programItems = $(".program-item");

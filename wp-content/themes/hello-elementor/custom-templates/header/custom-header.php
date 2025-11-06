@@ -1,18 +1,21 @@
 <?php
 /**
  * Custom Header Template
+ * IronMan theme custom header with mobile menu support
  * 
+ * @package HelloElementor
+ * @since 1.0.0
  */
 defined( 'ABSPATH' ) || exit;
 ?>
 
 <header id="custom-site-header" class="custom-header">
   <div class="custom-header-container">
-    <!-- Logo 區域 -->
+    <!-- Logo Section -->
     <div class="custom-header-logo">
       <a href="<?php echo esc_url( home_url( 'index.php/my-account/' ) ); ?>" class="custom-logo-link">
         <?php 
-        // 優先使用自定義 Logo
+        // Use custom logo if available
         if ( has_custom_logo() ) {
           $custom_logo_id = get_theme_mod( 'custom_logo' );
           $logo_url = wp_get_attachment_image_src( $custom_logo_id , 'full' );
@@ -20,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
             echo '<img src="' . esc_url( $logo_url[0] ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="custom-logo-img">';
           }
         } else {
-          // 使用默認 Logo
+          // Use default logo
           $default_logo = get_template_directory_uri() . '/assets/images/ironman-logo.png';
           if ( file_exists( get_template_directory() . '/assets/images/ironman-logo.png' ) ) {
             echo '<img src="' . esc_url( $default_logo ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="custom-logo-img">';
@@ -31,7 +34,7 @@ defined( 'ABSPATH' ) || exit;
       </a>
     </div>
 
-    <!-- 導航菜單區域 -->
+    <!-- Navigation Menu Section -->
     <nav class="custom-header-nav">
       <?php
       wp_nav_menu( array(
@@ -43,10 +46,10 @@ defined( 'ABSPATH' ) || exit;
       ?>
     </nav>
 
-    <!-- 右側按鈕區域 -->
+    <!-- Right Side Actions -->
     <div class="custom-header-actions">
       <?php if ( is_user_logged_in() ) : ?>
-        <!-- 已登入用戶 - 顯示三個獨立按鈕 -->
+        <!-- Logged-in users - Show action buttons -->
         <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'program-list' ) ) ); ?>" class="header-btn header-btn-program">
           <span class="header-btn-text">Program</span>
         </a>
@@ -63,7 +66,7 @@ defined( 'ABSPATH' ) || exit;
           <span class="header-btn-text">Log Out</span>
         </a>
       <?php else : ?>
-        <!-- 未登入用戶 -->
+        <!-- Not logged-in users -->
         <a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="header-btn header-btn-login">
           <span class="header-btn-text">Login</span>
         </a>
@@ -73,15 +76,15 @@ defined( 'ABSPATH' ) || exit;
       <?php endif; ?>
     </div>
 
-    <!-- 手機版菜單按鈕 -->
-    <button class="custom-header-toggle" aria-label="開啟選單">
+    <!-- Mobile Menu Toggle Button -->
+    <button class="custom-header-toggle" aria-label="Open menu">
       <span class="toggle-bar"></span>
       <span class="toggle-bar"></span>
       <span class="toggle-bar"></span>
     </button>
   </div>
 
-  <!-- 手機版菜單 -->
+  <!-- Mobile Menu -->
   <div class="custom-header-mobile-menu">
     <?php
     wp_nav_menu( array(

@@ -1,7 +1,7 @@
 <?php
 /**
  * Single Trainer Template
- * 教练详情页模板
+ * Trainer Detail Page Template
  * 
  * @package HelloElementor
  * @since 1.0.0
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// 加载样式和脚本
+// Load styles and scripts
 function single_trainer_enqueue_assets() {
     wp_enqueue_style( 
         'single-trainer-style', 
@@ -35,7 +35,7 @@ get_header();
 
 <div class="single-trainer-page">
     <?php while ( have_posts() ) : the_post(); 
-        // 获取教练的自定义字段
+        // Get trainer custom fields
         $experience = get_post_meta( get_the_ID(), '_trainer_experience', true );
         $certification = get_post_meta( get_the_ID(), '_trainer_certification', true );
         $phone = get_post_meta( get_the_ID(), '_trainer_phone', true );
@@ -45,7 +45,7 @@ get_header();
         $linkedin = get_post_meta( get_the_ID(), '_trainer_linkedin', true );
         $custom_image_id = get_post_meta( get_the_ID(), '_trainer_custom_image', true );
         
-        // 获取教练分类
+        // Get trainer categories
         $categories = get_the_terms( get_the_ID(), 'trainer_category' );
         $category_names = array();
         if ( $categories && ! is_wp_error( $categories ) ) {
@@ -75,7 +75,7 @@ get_header();
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                     <path d="M10 2L12.5 7.5L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7.5L10 2Z" stroke="currentColor" stroke-width="1.5"/>
                                 </svg>
-                                <?php echo esc_html( $experience ); ?> 年专业经验
+                                <?php echo esc_html( $experience ); ?> Years of Professional Experience
                             </p>
                         <?php endif; ?>
                     </div>
@@ -93,7 +93,7 @@ get_header();
                             ?>
                             <div class="trainer-placeholder-image">
                                 <span class="placeholder-icon">👤</span>
-                                <span class="placeholder-text">教练照片</span>
+                                <span class="placeholder-text">Trainer Photo</span>
                             </div>
                             <?php
                         }
@@ -103,7 +103,7 @@ get_header();
             </div>
         </div>
         
-        <!-- 向下滚动提示 -->
+        <!-- Scroll Down Indicator -->
         <div class="scroll-indicator">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" stroke-width="2"/>
@@ -111,20 +111,20 @@ get_header();
         </div>
     </section>
 
-    <!-- 主要内容区域 -->
+    <!-- Main Content Area -->
     <div class="trainer-main-content">
         <div class="container">
             <div class="content-wrapper">
-                <!-- 左侧内容 -->
+                <!-- Left Content -->
                 <div class="content-area">
-                    <!-- 快速信息卡片 -->
+                    <!-- Quick Info Cards -->
                     <div class="info-cards">
                         <?php if ( $experience ) : ?>
                             <div class="info-card">
                                 <div class="card-icon">⏱️</div>
                                 <div class="card-content">
-                                    <div class="card-label">执教经验</div>
-                                    <div class="card-value"><?php echo esc_html( $experience ); ?> 年</div>
+                                    <div class="card-label">Training Experience</div>
+                                    <div class="card-value"><?php echo esc_html( $experience ); ?> Years</div>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -133,7 +133,7 @@ get_header();
                             <div class="info-card">
                                 <div class="card-icon">🏆</div>
                                 <div class="card-content">
-                                    <div class="card-label">专业认证</div>
+                                    <div class="card-label">Certification</div>
                                     <div class="card-value"><?php echo esc_html( $certification ); ?></div>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@ get_header();
                             <div class="info-card">
                                 <div class="card-icon">📞</div>
                                 <div class="card-content">
-                                    <div class="card-label">联系电话</div>
+                                    <div class="card-label">Phone</div>
                                     <div class="card-value">
                                         <a href="tel:<?php echo esc_attr( $phone ); ?>"><?php echo esc_html( $phone ); ?></a>
                                     </div>
@@ -155,7 +155,7 @@ get_header();
                             <div class="info-card">
                                 <div class="card-icon">✉️</div>
                                 <div class="card-content">
-                                    <div class="card-label">电子邮箱</div>
+                                    <div class="card-label">Email</div>
                                     <div class="card-value">
                                         <a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
                                     </div>
@@ -164,11 +164,11 @@ get_header();
                         <?php endif; ?>
                     </div>
 
-                    <!-- 主要描述内容 -->
+                    <!-- Main Description Content -->
                     <article class="trainer-description">
                         <h2 class="section-title">
                             <span class="title-icon">📋</span>
-                            关于教练
+                            About the Trainer
                         </h2>
                         <div class="description-content">
                             <?php 
@@ -183,30 +183,30 @@ get_header();
                             } else {
                                 ?>
                                 <div class="no-content-message">
-                                    <h3>👋 教练简介</h3>
-                                    <p>这位教练拥有丰富的执教经验，致力于帮助学员达到健身目标。</p>
+                                    <h3>👋 Trainer Profile</h3>
+                                    <p>This trainer has extensive coaching experience and is dedicated to helping clients achieve their fitness goals.</p>
                                     
-                                    <h4>教学特色：</h4>
+                                    <h4>Training Specialties:</h4>
                                     <ul>
-                                        <li>✅ 个性化训练计划定制</li>
-                                        <li>✅ 专业的动作指导和纠正</li>
-                                        <li>✅ 科学的训练方法和体系</li>
-                                        <li>✅ 耐心细致的教学态度</li>
-                                        <li>✅ 持续的进度跟踪和反馈</li>
+                                        <li>✅ Personalized training program design</li>
+                                        <li>✅ Professional movement guidance and correction</li>
+                                        <li>✅ Science-based training methods and systems</li>
+                                        <li>✅ Patient and detail-oriented teaching approach</li>
+                                        <li>✅ Continuous progress tracking and feedback</li>
                                     </ul>
                                     
                                     <?php if ( $experience ) : ?>
-                                        <h4>专业背景：</h4>
-                                        <p>拥有 <?php echo esc_html( $experience ); ?> 年的专业执教经验，帮助数百位学员成功达成健身目标。</p>
+                                        <h4>Professional Background:</h4>
+                                        <p>With <?php echo esc_html( $experience ); ?> years of professional coaching experience, helping hundreds of clients successfully achieve their fitness goals.</p>
                                     <?php endif; ?>
                                     
                                     <?php if ( $certification ) : ?>
-                                        <h4>资质认证：</h4>
+                                        <h4>Certifications:</h4>
                                         <p><?php echo esc_html( $certification ); ?></p>
                                     <?php endif; ?>
                                     
                                     <div class="content-tip">
-                                        <strong>💡 提示：</strong> 管理员可以在 WordPress 后台编辑此教练信息，在编辑器中添加详细的教练介绍、教学理念、成功案例等内容。
+                                        <strong>💡 Tip:</strong> Administrators can edit trainer information in the WordPress dashboard and add detailed trainer introduction, training philosophy, success stories, and more in the editor.
                                     </div>
                                 </div>
                                 <?php
@@ -215,7 +215,7 @@ get_header();
                         </div>
                     </article>
 
-                    <!-- 相关教练推荐 -->
+                    <!-- Related Trainers -->
                     <?php
                     $related_args = array(
                         'post_type' => 'trainer',
@@ -242,7 +242,7 @@ get_header();
                         <section class="related-trainers">
                             <h2 class="section-title">
                                 <span class="title-icon">👥</span>
-                                其他教练
+                                Other Trainers
                             </h2>
                             <div class="related-trainers-grid">
                                 <?php while ( $related_trainers->have_posts() ) : $related_trainers->the_post(); 
@@ -277,7 +277,7 @@ get_header();
                                                         <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
                                                             <path d="M10 2L12.5 7.5L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7.5L10 2Z" stroke="currentColor" stroke-width="1.5"/>
                                                         </svg>
-                                                        <?php echo esc_html( $related_experience ); ?> 年经验
+                                                        <?php echo esc_html( $related_experience ); ?> Years
                                                     </p>
                                                 <?php endif; ?>
                                                 <?php if ( $related_certification ) : ?>
@@ -292,12 +292,12 @@ get_header();
                     <?php endif; ?>
                 </div>
 
-                <!-- 右侧边栏 -->
+                <!-- Right Sidebar -->
                 <aside class="trainer-sidebar">
-                    <!-- 社交媒体 -->
+                    <!-- Social Media -->
                     <?php if ( $facebook || $instagram || $linkedin ) : ?>
                         <div class="sidebar-widget social-widget">
-                            <h3 class="widget-title">关注教练</h3>
+                            <h3 class="widget-title">Follow Trainer</h3>
                             <div class="social-links">
                                 <?php if ( $facebook ) : ?>
                                     <a href="<?php echo esc_url( $facebook ); ?>" target="_blank" rel="noopener" class="social-link facebook" data-platform="facebook">
@@ -329,17 +329,17 @@ get_header();
                         </div>
                     <?php endif; ?>
 
-                    <!-- 联系教练CTA -->
+                    <!-- Contact Trainer CTA -->
                     <div class="sidebar-widget cta-widget">
-                        <h3 class="widget-title">联系教练</h3>
-                        <p class="cta-description">想要开始训练？立即联系我们的专业教练！</p>
+                        <h3 class="widget-title">Contact Trainer</h3>
+                        <p class="cta-description">Ready to start training? Contact our professional trainer now!</p>
                         
                         <?php if ( $phone ) : ?>
                             <a href="tel:<?php echo esc_attr( $phone ); ?>" class="cta-button cta-phone">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                     <path d="M2 3C2 2.44772 2.44772 2 3 2H5.15287C5.64171 2 6.0589 2.35341 6.13927 2.8356L6.87858 7.27147C6.95075 7.70451 6.73206 8.13397 6.3394 8.3303L4.79126 9.10437C5.90756 11.8783 8.12168 14.0924 10.8956 15.2087L11.6697 13.6606C11.866 13.2679 12.2955 13.0492 12.7285 13.1214L17.1644 13.8607C17.6466 13.9411 18 14.3583 18 14.8471V17C18 17.5523 17.5523 18 17 18H15C7.8203 18 2 12.1797 2 5V3Z" stroke="currentColor" stroke-width="1.5"/>
                                 </svg>
-                                立即致电
+                                Call Now
                             </a>
                         <?php endif; ?>
                         
@@ -348,14 +348,14 @@ get_header();
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                     <path d="M3 4L10 11L17 4M3 4H17M3 4V16H17V4" stroke="currentColor" stroke-width="1.5"/>
                                 </svg>
-                                发送邮件
+                                Send Email
                             </a>
                         <?php endif; ?>
                     </div>
 
-                    <!-- 分享小部件 -->
+                    <!-- Share Widget -->
                     <div class="sidebar-widget share-widget">
-                        <h3 class="widget-title">分享教练</h3>
+                        <h3 class="widget-title">Share Trainer</h3>
                         <div class="share-buttons">
                             <button class="share-btn share-facebook" data-platform="facebook">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -380,7 +380,7 @@ get_header();
         </div>
     </div>
 
-    <!-- 阅读进度条 -->
+    <!-- Reading Progress Bar -->
     <div class="reading-progress">
         <div class="reading-progress-bar"></div>
     </div>

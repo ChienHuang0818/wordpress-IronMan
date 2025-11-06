@@ -1,7 +1,7 @@
 <?php
 /**
  * Trainer List Feature
- * 自定义教练列表功能
+ * Custom trainer list functionality
  * 
  * Shortcode: [trainer_list]
  * 
@@ -11,7 +11,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// 定义常量
+// Define constants
 define( 'TRAINER_LIST_VER', '1.0.0' );
 define( 'TRAINER_LIST_URL', get_template_directory_uri() . '/custom-features/trainer-list/' );
 define( 'TRAINER_LIST_PATH', get_template_directory() . '/custom-features/trainer-list/' );
@@ -19,43 +19,43 @@ define( 'TRAINER_LIST_PATH', get_template_directory() . '/custom-features/traine
 class Trainer_List_Feature {
     
     /**
-     * 构造函数
+     * Constructor
      */
     public function __construct() {
-        // 注册自定义文章类型
+        // Register custom post type
         add_action( 'init', [ $this, 'register_trainer_post_type' ] );
         
-        // 注册 shortcode
+        // Register shortcode
         add_action( 'init', [ $this, 'register_shortcode' ] );
         
-        // 载入资源
+        // Enqueue assets
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
         
-        // 添加自定义栏位
+        // Add custom meta boxes
         add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
         add_action( 'save_post', [ $this, 'save_meta_boxes' ] );
     }
 
     /**
-     * 注册自定义文章类型
+     * Register custom post type
      */
     public function register_trainer_post_type() {
         $labels = array(
-            'name'                  => '教练团队',
-            'singular_name'         => '教练',
-            'menu_name'             => '教练团队',
-            'add_new'               => '新增教练',
-            'add_new_item'          => '新增教练',
-            'edit_item'             => '编辑教练',
-            'new_item'              => '新教练',
-            'view_item'             => '查看教练',
-            'view_items'            => '查看教练',
-            'search_items'          => '搜索教练',
-            'all_items'             => '所有教练',
-            'archives'              => '教练归档',
-            'attributes'            => '教练属性',
-            'insert_into_item'      => '插入到教练',
-            'uploaded_to_this_item' => '上传到此教练',
+            'name'                  => 'Trainers',
+            'singular_name'         => 'Trainer',
+            'menu_name'             => 'Trainers',
+            'add_new'               => 'Add New',
+            'add_new_item'          => 'Add New Trainer',
+            'edit_item'             => 'Edit Trainer',
+            'new_item'              => 'New Trainer',
+            'view_item'             => 'View Trainer',
+            'view_items'            => 'View Trainers',
+            'search_items'          => 'Search Trainers',
+            'all_items'             => 'All Trainers',
+            'archives'              => 'Trainer Archives',
+            'attributes'            => 'Trainer Attributes',
+            'insert_into_item'      => 'Insert into trainer',
+            'uploaded_to_this_item' => 'Uploaded to this trainer',
         );
 
         $args = array(
@@ -77,18 +77,18 @@ class Trainer_List_Feature {
 
         register_post_type( 'trainer', $args );
 
-        // 注册分类法
+        // Register taxonomy
         register_taxonomy(
             'trainer_specialty',
             'trainer',
             array(
                 'labels' => array(
-                    'name'          => '专业领域',
-                    'singular_name' => '专业',
-                    'search_items'  => '搜索专业',
-                    'all_items'     => '所有专业',
-                    'edit_item'     => '编辑专业',
-                    'add_new_item'  => '新增专业',
+                    'name'          => 'Specialties',
+                    'singular_name' => 'Specialty',
+                    'search_items'  => 'Search Specialties',
+                    'all_items'     => 'All Specialties',
+                    'edit_item'     => 'Edit Specialty',
+                    'add_new_item'  => 'Add New Specialty',
                 ),
                 'hierarchical'      => true,
                 'show_in_rest'      => true,
@@ -99,17 +99,17 @@ class Trainer_List_Feature {
     }
 
     /**
-     * 注册 Shortcode
+     * Register shortcode
      */
     public function register_shortcode() {
         add_shortcode( 'trainer_list', [ $this, 'render_trainer_list' ] );
     }
 
     /**
-     * 载入 CSS 和 JavaScript
+     * Enqueue CSS and JavaScript
      */
     public function enqueue_assets() {
-        // 只在包含 shortcode 的页面载入
+        // Only load on pages with shortcode
         global $post;
         if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'trainer_list' ) ) {
             wp_enqueue_style(
@@ -127,7 +127,7 @@ class Trainer_List_Feature {
                 true
             );
 
-            // 传递数据给 JavaScript
+            // Pass data to JavaScript
             wp_localize_script( 'trainer-list-script', 'TrainerListConfig', array(
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
                 'nonce'   => wp_create_nonce( 'trainer_list_nonce' ),
@@ -136,36 +136,36 @@ class Trainer_List_Feature {
     }
 
     /**
-     * 添加自定义栏位
+     * Add custom meta boxes
      */
     public function add_meta_boxes() {
         add_meta_box(
             'trainer_details',
-            '教练详细信息',
+            'Trainer Details',
             [ $this, 'render_meta_box' ],
             'trainer',
             'normal',
             'high'
         );
         
-        // 加载媒体上传器
+        // Load media uploader
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
     }
     
     /**
-     * 加载后台脚本
+     * Enqueue admin scripts
      */
     public function enqueue_admin_scripts( $hook ) {
         global $post_type;
         
-        // 只在编辑 trainer 类型的文章时加载
+        // Only load when editing trainer post type
         if ( ( 'post.php' === $hook || 'post-new.php' === $hook ) && 'trainer' === $post_type ) {
             wp_enqueue_media();
         }
     }
 
     /**
-     * 渲染自定义栏位
+     * Render meta box
      */
     public function render_meta_box( $post ) {
         wp_nonce_field( 'trainer_meta_nonce', 'trainer_nonce' );
@@ -194,49 +194,49 @@ class Trainer_List_Feature {
         </style>
 
         <div class="trainer-meta-field">
-            <label>📸 教练照片</label>
+            <label>📸 Trainer Photo</label>
             <div class="trainer-image-upload">
                 <input type="hidden" id="trainer_custom_image" name="trainer_custom_image" value="<?php echo esc_attr( $custom_image ); ?>" />
                 
                 <div class="trainer-image-preview" id="trainer-image-preview">
                     <?php if ( $custom_image ) : ?>
-                        <img src="<?php echo esc_url( wp_get_attachment_url( $custom_image ) ); ?>" alt="教练照片" />
+                        <img src="<?php echo esc_url( wp_get_attachment_url( $custom_image ) ); ?>" alt="Trainer photo" />
                     <?php else : ?>
-                        <p style="color: #999;">还没有上传照片</p>
+                        <p style="color: #999;">No photo uploaded yet</p>
                     <?php endif; ?>
                 </div>
                 
                 <button type="button" class="upload-btn" id="upload-trainer-image">
-                    <?php echo $custom_image ? '更换照片' : '上传照片'; ?>
+                    <?php echo $custom_image ? 'Change Photo' : 'Upload Photo'; ?>
                 </button>
                 
                 <?php if ( $custom_image ) : ?>
-                    <button type="button" class="remove-btn" id="remove-trainer-image">移除照片</button>
+                    <button type="button" class="remove-btn" id="remove-trainer-image">Remove Photo</button>
                 <?php endif; ?>
             </div>
         </div>
 
         <div class="trainer-meta-field">
-            <label for="trainer_experience">工作经验（年）</label>
+            <label for="trainer_experience">Years of Experience</label>
             <input type="number" id="trainer_experience" name="trainer_experience" value="<?php echo esc_attr( $experience ); ?>" placeholder="5" />
         </div>
 
         <div class="trainer-meta-field">
-            <label for="trainer_certification">专业证照</label>
-            <textarea id="trainer_certification" name="trainer_certification" placeholder="例如：国际健身教练证照（NASM-CPT）、运动营养师证照"><?php echo esc_textarea( $certification ); ?></textarea>
+            <label for="trainer_certification">Certifications</label>
+            <textarea id="trainer_certification" name="trainer_certification" placeholder="e.g., NASM-CPT, Sports Nutrition Certificate"><?php echo esc_textarea( $certification ); ?></textarea>
         </div>
 
         <div class="trainer-meta-field">
-            <label for="trainer_phone">联系电话</label>
+            <label for="trainer_phone">Phone Number</label>
             <input type="text" id="trainer_phone" name="trainer_phone" value="<?php echo esc_attr( $phone ); ?>" placeholder="+886 912 345 678" />
         </div>
 
         <div class="trainer-meta-field">
-            <label for="trainer_email">电子邮件</label>
+            <label for="trainer_email">Email Address</label>
             <input type="email" id="trainer_email" name="trainer_email" value="<?php echo esc_attr( $email ); ?>" placeholder="trainer@example.com" />
         </div>
 
-        <h3 style="margin-top: 30px; margin-bottom: 15px;">社交媒体</h3>
+        <h3 style="margin-top: 30px; margin-bottom: 15px;">Social Media</h3>
 
         <div class="trainer-meta-field">
             <label for="trainer_facebook">Facebook</label>
@@ -266,18 +266,18 @@ class Trainer_List_Feature {
                 }
                 
                 mediaUploader = wp.media({
-                    title: '选择教练照片',
-                    button: { text: '使用这张照片' },
+                    title: 'Select Trainer Photo',
+                    button: { text: 'Use This Photo' },
                     multiple: false
                 });
                 
                 mediaUploader.on('select', function() {
                     var attachment = mediaUploader.state().get('selection').first().toJSON();
                     $('#trainer_custom_image').val(attachment.id);
-                    $('#trainer-image-preview').html('<img src="' + attachment.url + '" alt="教练照片" />');
-                    $('#upload-trainer-image').text('更换照片');
+                    $('#trainer-image-preview').html('<img src="' + attachment.url + '" alt="Trainer photo" />');
+                    $('#upload-trainer-image').text('Change Photo');
                     if ($('#remove-trainer-image').length === 0) {
-                        $('#upload-trainer-image').after('<button type="button" class="remove-btn" id="remove-trainer-image">移除照片</button>');
+                        $('#upload-trainer-image').after('<button type="button" class="remove-btn" id="remove-trainer-image">Remove Photo</button>');
                     }
                 });
                 
@@ -287,8 +287,8 @@ class Trainer_List_Feature {
             $(document).on('click', '#remove-trainer-image', function(e) {
                 e.preventDefault();
                 $('#trainer_custom_image').val('');
-                $('#trainer-image-preview').html('<p style="color: #999;">还没有上传照片</p>');
-                $('#upload-trainer-image').text('上传照片');
+                $('#trainer-image-preview').html('<p style="color: #999;">No photo uploaded yet</p>');
+                $('#upload-trainer-image').text('Upload Photo');
                 $(this).remove();
             });
         });
@@ -298,25 +298,25 @@ class Trainer_List_Feature {
     }
 
     /**
-     * 保存自定义栏位
+     * Save custom meta boxes
      */
     public function save_meta_boxes( $post_id ) {
-        // 检查 nonce
+        // Check nonce
         if ( ! isset( $_POST['trainer_nonce'] ) || ! wp_verify_nonce( $_POST['trainer_nonce'], 'trainer_meta_nonce' ) ) {
             return;
         }
 
-        // 检查自动保存
+        // Check autosave
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return;
         }
 
-        // 检查权限
+        // Check permissions
         if ( ! current_user_can( 'edit_post', $post_id ) ) {
             return;
         }
 
-        // 保存字段
+        // Save fields
         $fields = array( 
             'trainer_experience', 
             'trainer_certification', 
@@ -336,18 +336,18 @@ class Trainer_List_Feature {
     }
 
     /**
-     * 渲染教练列表
+     * Render trainer list
      */
     public function render_trainer_list( $atts ) {
-        // 处理 shortcode 参数
+        // Process shortcode attributes
         $atts = shortcode_atts( array(
-            'specialty'  => '',      // 特定专业领域
-            'limit'      => 12,      // 显示数量
-            'layout'     => 'grid',  // 布局类型: grid, list
-            'orderby'    => 'date',  // 排序方式
+            'specialty'  => '',      // Specific specialty
+            'limit'      => 12,      // Number to display
+            'layout'     => 'grid',  // Layout type: grid, list
+            'orderby'    => 'date',  // Order by
         ), $atts );
 
-        // 查询参数
+        // Query parameters
         $args = array(
             'post_type'      => 'trainer',
             'posts_per_page' => intval( $atts['limit'] ),
@@ -356,7 +356,7 @@ class Trainer_List_Feature {
             'order'          => 'DESC',
         );
 
-        // 专业领域筛选
+        // Specialty filter
         if ( ! empty( $atts['specialty'] ) ) {
             $args['tax_query'] = array(
                 array(
@@ -369,7 +369,7 @@ class Trainer_List_Feature {
 
         $query = new WP_Query( $args );
 
-        // 开始输出缓冲
+        // Start output buffering
         ob_start();
         ?>
 
@@ -391,7 +391,7 @@ class Trainer_List_Feature {
                         $custom_image_id = get_post_meta( get_the_ID(), '_trainer_custom_image', true );
                         $specialties = get_the_terms( get_the_ID(), 'trainer_specialty' );
                         
-                        // 优先使用自定义图片，其次使用特色图片
+                        // Use custom image first, then featured image
                         $has_image = false;
                         $image_html = '';
                         
@@ -416,12 +416,12 @@ class Trainer_List_Feature {
                                     </a>
                                 </div>
                             <?php else : ?>
-                                <!-- 没有图片时显示占位符 -->
+                                <!-- Show placeholder when no image available -->
                                 <div class="trainer-photo trainer-no-image">
                                     <a href="<?php the_permalink(); ?>">
                                         <div class="placeholder-image">
                                             <span class="placeholder-icon">👤</span>
-                                            <span class="placeholder-text">教练</span>
+                                            <span class="placeholder-text">Trainer</span>
                                         </div>
                                     </a>
                                 </div>
@@ -452,15 +452,15 @@ class Trainer_List_Feature {
                                     <?php if ( $experience ) : ?>
                                         <div class="trainer-meta-item trainer-experience">
                                             <span class="meta-icon">💪</span>
-                                            <span class="meta-label">经验：</span>
-                                            <span class="meta-value"><?php echo esc_html( $experience ); ?> 年</span>
+                                            <span class="meta-label">Experience:</span>
+                                            <span class="meta-value"><?php echo esc_html( $experience ); ?> years</span>
                                         </div>
                                     <?php endif; ?>
 
                                     <?php if ( $certification ) : ?>
                                         <div class="trainer-meta-item trainer-certification">
                                             <span class="meta-icon">🏆</span>
-                                            <span class="meta-label">证照：</span>
+                                            <span class="meta-label">Certifications:</span>
                                             <span class="meta-value"><?php echo esc_html( wp_trim_words( $certification, 10 ) ); ?></span>
                                         </div>
                                     <?php endif; ?>
@@ -495,7 +495,7 @@ class Trainer_List_Feature {
                                 <?php endif; ?>
 
                                 <a href="<?php the_permalink(); ?>" class="trainer-button">
-                                    查看详细资料 →
+                                    View Profile →
                                 </a>
                             </div>
 
@@ -505,7 +505,7 @@ class Trainer_List_Feature {
                 </div>
 
             <?php else : ?>
-                <p class="no-trainers">目前没有可用的教练信息。</p>
+                <p class="no-trainers">No trainers available at this time.</p>
             <?php endif; ?>
 
             <?php wp_reset_postdata(); ?>
@@ -517,6 +517,6 @@ class Trainer_List_Feature {
     }
 }
 
-// 初始化功能
+// Initialize feature
 new Trainer_List_Feature();
 

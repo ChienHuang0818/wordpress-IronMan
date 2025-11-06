@@ -1,13 +1,13 @@
 /**
  * Custom Register Page Styles
- * 自定义注册页面样式 - 黑红配色
+ * Black and red color scheme for IronMan theme
  * 
  * @package HelloElementor
  * @since 1.0.0
  */
 
 /* ============================================
-   全局样式
+   Global Styles
    ============================================ */
 .custom-register-page {
   min-height: 100vh;
@@ -59,7 +59,7 @@
 }
 
 /* ============================================
-   左侧：欢迎信息
+   Left Side: Welcome Section
    ============================================ */
 .register-welcome {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
@@ -184,7 +184,7 @@
 }
 
 /* ============================================
-   右侧：注册表单
+   Right Side: Registration Form
    ============================================ */
 .register-form-section {
   background: white;
@@ -216,7 +216,7 @@
   margin: 0;
 }
 
-/* 消息提示 */
+/* Message Alerts */
 .register-message {
   display: flex;
   align-items: center;
@@ -252,7 +252,7 @@
   color: #721c24;
 }
 
-/* 表单部分 */
+/* Form Sections */
 .register-form {
   display: flex;
   flex-direction: column;
@@ -340,7 +340,7 @@
   margin-top: 5px;
 }
 
-/* 密码输入框 */
+/* Password Input */
 .password-input-wrapper {
   position: relative;
 }
@@ -369,7 +369,7 @@
   color: #e63946;
 }
 
-/* 密码强度指示器 */
+/* Password Strength Indicator */
 .password-strength {
   margin-top: 8px;
   height: 4px;
@@ -406,7 +406,7 @@
   background: #28a745;
 }
 
-/* 复选框 */
+/* Checkboxes */
 .form-group-checkbox {
   margin-bottom: 15px;
 }
@@ -444,7 +444,7 @@
   text-decoration: underline;
 }
 
-/* 提交按钮 */
+/* Submit Button */
 .register-submit-btn {
   width: 100%;
   padding: 15px 30px;
@@ -491,7 +491,7 @@
   }
 }
 
-/* 表单底部 */
+/* Form Footer */
 .form-footer {
   text-align: center;
   margin-top: 20px;
@@ -517,7 +517,7 @@
 }
 
 /* ============================================
-   响应式设计
+   Responsive Design
    ============================================ */
 @media (max-width: 992px) {
   .register-container {
@@ -618,7 +618,7 @@
 }
 
 /* ============================================
-   滚动条样式
+   Scrollbar Styles
    ============================================ */
 .register-form-section::-webkit-scrollbar {
   width: 8px;

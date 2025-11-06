@@ -1,6 +1,6 @@
 /**
  * Single Program Page Scripts
- * 训练项目单页脚本
+ * Single training program page scripts
  *
  * @package HelloElementor
  * @since 1.0.0
@@ -10,40 +10,40 @@
   "use strict";
 
   /**
-   * 复制链接到剪贴板
+   * Copy link to clipboard
    */
   window.copyToClipboard = function (text) {
-    // 创建临时文本区域
+    // Create temporary textarea
     const tempInput = document.createElement("textarea");
     tempInput.value = text;
     tempInput.style.position = "fixed";
     tempInput.style.opacity = "0";
     document.body.appendChild(tempInput);
 
-    // 选择并复制
+    // Select and copy
     tempInput.select();
     tempInput.setSelectionRange(0, 99999);
 
     try {
       document.execCommand("copy");
-      showNotification("链接已复制到剪贴板！", "success");
+      showNotification("Link copied to clipboard!", "success");
     } catch (err) {
-      console.error("复制失败:", err);
-      showNotification("复制失败，请手动复制", "error");
+      console.error("Copy failed:", err);
+      showNotification("Copy failed, please copy manually", "error");
     }
 
-    // 移除临时元素
+    // Remove temporary element
     document.body.removeChild(tempInput);
   };
 
   /**
-   * 显示通知消息
+   * Show notification message
    */
   function showNotification(message, type = "info") {
-    // 移除旧通知
+    // Remove old notifications
     $(".copy-notification").remove();
 
-    // 创建新通知
+    // Create new notification
     const notification = $('<div class="copy-notification"></div>')
       .addClass("notification-" + type)
       .text(message)
@@ -62,13 +62,13 @@
         opacity: "0",
       });
 
-    // 添加到页面
+    // Add to page
     $("body").append(notification);
 
-    // 淡入动画
+    // Fade in animation
     notification.animate({ opacity: 1 }, 300);
 
-    // 3秒后淡出并移除
+    // Fade out and remove after 3 seconds
     setTimeout(function () {
       notification.animate({ opacity: 0 }, 300, function () {
         $(this).remove();
@@ -77,24 +77,24 @@
   }
 
   /**
-   * CTA 按钮点击事件
+   * CTA button click event
    */
   $(".cta-button").on("click", function () {
-    // 这里可以添加报名逻辑
-    // 例如：打开模态框、跳转到报名页面等
+    // Add enrollment logic here
+    // For example: open modal, redirect to enrollment page, etc.
 
-    // 示例：显示提示
-    showNotification("报名功能开发中，敬请期待！", "info");
+    // Example: show notification
+    showNotification("Enrollment feature coming soon!", "info");
 
-    // 或者跳转到联系页面
+    // Or redirect to contact page
     // window.location.href = '/contact/';
 
-    // 或者打开外部链接
+    // Or open external link
     // window.open('https://example.com/register', '_blank');
   });
 
   /**
-   * 平滑滚动动画
+   * Smooth scroll animation
    */
   $('a[href^="#"]').on("click", function (e) {
     const target = $(this.getAttribute("href"));
@@ -114,7 +114,7 @@
   });
 
   /**
-   * 图片懒加载（如果需要）
+   * Lazy load images (if needed)
    */
   function lazyLoadImages() {
     const images = document.querySelectorAll("img[data-src]");
@@ -134,7 +134,7 @@
   }
 
   /**
-   * 滚动动画效果
+   * Scroll animation effects
    */
   function initScrollAnimations() {
     const observerOptions = {
@@ -150,7 +150,7 @@
       });
     }, observerOptions);
 
-    // 为元素添加动画
+    // Add animation to elements
     document.querySelectorAll(".info-card, .related-program-card").forEach((el) => {
       el.style.opacity = "0";
       el.style.transform = "translateY(20px)";
@@ -158,7 +158,7 @@
       observer.observe(el);
     });
 
-    // 添加 CSS 类
+    // Add CSS class
     const style = document.createElement("style");
     style.textContent = `
             .animate-in {
@@ -170,7 +170,7 @@
   }
 
   /**
-   * 粘性侧边栏
+   * Sticky sidebar
    */
   function initStickySidebar() {
     if (window.innerWidth > 992) {
@@ -204,10 +204,10 @@
   }
 
   /**
-   * 阅读进度条
+   * Reading progress bar
    */
   function initReadingProgress() {
-    // 创建进度条
+    // Create progress bar
     const progressBar = $('<div class="reading-progress"></div>').css({
       position: "fixed",
       top: "0",
@@ -221,7 +221,7 @@
 
     $("body").prepend(progressBar);
 
-    // 更新进度
+    // Update progress
     $(window).on("scroll", function () {
       const windowHeight = $(window).height();
       const documentHeight = $(document).height();
@@ -233,7 +233,7 @@
   }
 
   /**
-   * 社交分享追踪
+   * Social share tracking
    */
   $(".share-btn").on("click", function () {
     const platform = $(this).hasClass("share-facebook")
@@ -242,7 +242,7 @@
       ? "Twitter"
       : "Link";
 
-    // 如果使用 Google Analytics
+    // If using Google Analytics
     if (typeof gtag !== "undefined") {
       gtag("event", "share", {
         event_category: "Social",
@@ -251,18 +251,18 @@
       });
     }
 
-    console.log("分享到:", platform);
+    console.log("Share to:", platform);
   });
 
   /**
-   * 图片点击放大
+   * Image click to enlarge
    */
   function initImageLightbox() {
     $(".program-content img").on("click", function () {
       const src = $(this).attr("src");
       const alt = $(this).attr("alt") || "";
 
-      // 创建灯箱
+      // Create lightbox
       const lightbox = $(`
                 <div class="image-lightbox" style="
                     position: fixed;
@@ -313,22 +313,22 @@
   }
 
   /**
-   * 初始化所有功能
+   * Initialize all features
    */
   $(document).ready(function () {
-    // 初始化滚动动画
+    // Initialize scroll animations
     initScrollAnimations();
 
-    // 初始化粘性侧边栏
+    // Initialize sticky sidebar
     initStickySidebar();
 
-    // 初始化阅读进度条
+    // Initialize reading progress bar
     initReadingProgress();
 
-    // 初始化图片灯箱
+    // Initialize image lightbox
     initImageLightbox();
 
-    // 懒加载图片（如果需要）
+    // Lazy load images (if needed)
     if ("IntersectionObserver" in window) {
       lazyLoadImages();
     }

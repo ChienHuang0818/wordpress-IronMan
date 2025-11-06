@@ -1,4 +1,4 @@
-# WordPress 核心文件 - 不上传
+# WordPress core files - do not upload
 /index.php
 /license.txt
 /readme.html
@@ -18,13 +18,13 @@
 /wp-admin/
 /wp-includes/
 
-# wp-content 中的核心内容
+# Core content in wp-content
 /wp-content/index.php
 /wp-content/languages/
 /wp-content/upgrade/
 /wp-content/cache/
 
-# 第三方插件 - 不上传（在服务器上安装）
+# Third-party plugins - do not upload (install on server)
 /wp-content/plugins/akismet/
 /wp-content/plugins/contact-form-7/
 /wp-content/plugins/yoast-seo/
@@ -32,14 +32,14 @@
 /wp-content/plugins/jetpack/
 
 
-# 配置文件 - 敏感信息
+# Configuration files - sensitive information
 wp-config.php
 .htaccess
 
-# 上传的文件 - 体积大
+# Uploaded files - large size
 /wp-content/uploads/
 
-# 日志和缓存
+# Logs and cache
 *.log
 /logs/
 /tmp/
@@ -67,28 +67,28 @@ Desktop.ini
 node_modules/
 npm-debug.log
 
-# 环境变量
+# Environment variables
 .env
 .env.local
 
-# 备份文件
+# Backup files
 *.sql
 *.sql.gz
 *.bak
 /wp-content/backup*/
 
-# Docker 相关（本地测试用）
+# Docker related (for local testing)
 docker-compose.override.yml
 
-# 預設忽略整個 wp-content（避免上傳備份/上傳檔案）
+# Ignore entire wp-content by default (avoid uploading backups/uploaded files)
 /wp-content/*
 
-# 但允許自定義主題
+# But allow custom themes
 !/wp-content/themes/
 /wp-content/themes/*
 !/wp-content/themes/hello-elementor/
 
-# 繼續排除其他大型檔案
+# Continue excluding other large files
 /wp-content/updraft/
 /wp-content/upgrade/
 *.zip

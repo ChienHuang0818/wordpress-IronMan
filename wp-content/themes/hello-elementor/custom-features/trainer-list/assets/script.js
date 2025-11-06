@@ -1,6 +1,6 @@
 /**
  * Trainer List JavaScript
- * 教练列表交互功能
+ * Trainer list interactive functionality
  *
  * @package HelloElementor
  * @since 1.0.0
@@ -10,7 +10,7 @@
   "use strict";
 
   /**
-   * 教练列表类
+   * Trainer List Class
    */
   class TrainerList {
     constructor() {
@@ -25,7 +25,7 @@
     }
 
     /**
-     * 初始化
+     * Initialize
      */
     init() {
       this.setupLazyLoading();
@@ -37,7 +37,7 @@
     }
 
     /**
-     * 设置懒加载
+     * Setup Lazy Loading
      */
     setupLazyLoading() {
       if ("IntersectionObserver" in window) {
@@ -61,10 +61,10 @@
     }
 
     /**
-     * 设置筛选动画
+     * Setup Filter Animation
      */
     setupFilterAnimation() {
-      // 可以在此添加筛选功能
+      // Filter functionality can be added here
       this.trainerItems.each((index, item) => {
         $(item).css({
           opacity: "0",
@@ -82,11 +82,11 @@
     }
 
     /**
-     * 设置社交链接
+     * Setup Social Links
      */
     setupSocialLinks() {
       $(".social-link").on("click", function (e) {
-        // 确保外部链接在新窗口打开
+        // Ensure external links open in new window
         const href = $(this).attr("href");
         if (href && href.startsWith("http")) {
           e.preventDefault();
@@ -96,23 +96,23 @@
     }
 
     /**
-     * 设置无障碍功能
+     * Setup Accessibility
      */
     setupAccessibility() {
-      // 键盘导航支持
+      // Keyboard navigation support
       this.trainerItems.find("a, button").on("keydown", function (e) {
         if (e.key === "Enter" || e.key === " ") {
           $(this).click();
         }
       });
 
-      // 为图片添加 alt 属性（如果缺失）
-      this.trainerItems.find("img:not([alt])").attr("alt", "教练照片");
+      // Add alt attribute to images (if missing)
+      this.trainerItems.find("img:not([alt])").attr("alt", "Trainer photo");
     }
   }
 
   /**
-   * 教练筛选器（可选功能）
+   * Trainer Filter (Optional Feature)
    */
   class TrainerFilter {
     constructor() {
@@ -135,11 +135,11 @@
       const button = $(e.currentTarget);
       const specialty = button.data("specialty");
 
-      // 更新按钮状态
+      // Update button state
       this.filterButtons.removeClass("active");
       button.addClass("active");
 
-      // 筛选教练
+      // Filter trainers
       if (specialty === "all") {
         this.showAll();
       } else {
@@ -171,7 +171,7 @@
   }
 
   /**
-   * 教练搜索功能
+   * Trainer Search Functionality
    */
   class TrainerSearch {
     constructor() {
@@ -228,7 +228,7 @@
   }
 
   /**
-   * 教练卡片悬停效果增强
+   * Enhanced Trainer Card Hover Effects
    */
   class TrainerCardEffects {
     constructor() {
@@ -247,7 +247,7 @@
     }
 
     /**
-     * 视差效果（可选）
+     * Parallax Effect (Optional)
      */
     setupParallaxEffect() {
       this.trainerItems.on("mousemove", function (e) {
@@ -275,17 +275,17 @@
     }
 
     /**
-     * 点击追踪（用于分析）
+     * Click Tracking (for Analytics)
      */
     setupClickTracking() {
       this.trainerItems.find("a").on("click", function () {
         const trainerId = $(this).closest(".trainer-item").data("trainer-id");
         const trainerName = $(this).closest(".trainer-item").find(".trainer-name").text().trim();
 
-        // 可以在此添加 Google Analytics 或其他追踪代码
+        // Google Analytics or other tracking code can be added here
         console.log("Trainer clicked:", trainerId, trainerName);
 
-        // 示例：Google Analytics 事件
+        // Example: Google Analytics event
         if (typeof gtag !== "undefined") {
           gtag("event", "trainer_view", {
             trainer_id: trainerId,
@@ -297,7 +297,7 @@
   }
 
   /**
-   * AJAX 加载更多功能（可选）
+   * AJAX Load More Functionality (Optional)
    */
   class TrainerLoadMore {
     constructor() {
@@ -325,7 +325,7 @@
       }
 
       this.isLoading = true;
-      this.loadMoreBtn.text("加载中...").prop("disabled", true);
+      this.loadMoreBtn.text("Loading...").prop("disabled", true);
 
       $.ajax({
         url: TrainerListConfig.ajaxUrl,
@@ -344,25 +344,25 @@
               this.loadMoreBtn.remove();
             }
 
-            // 重新初始化新加载的项目
+            // Reinitialize newly loaded items
             new TrainerList();
           } else {
-            alert("加载失败，请稍后再试。");
+            alert("Failed to load, please try again later.");
           }
         },
         error: () => {
-          alert("发生错误，请稍后再试。");
+          alert("An error occurred, please try again later.");
         },
         complete: () => {
           this.isLoading = false;
-          this.loadMoreBtn.text("加载更多").prop("disabled", false);
+          this.loadMoreBtn.text("Load More").prop("disabled", false);
         },
       });
     }
   }
 
   /**
-   * 文档就绪时初始化
+   * Initialize on Document Ready
    */
   $(document).ready(function () {
     new TrainerList();
@@ -373,10 +373,10 @@
   });
 
   /**
-   * 窗口加载完成后的优化
+   * Optimization After Window Load
    */
   $(window).on("load", function () {
-    // 移除初始加载动画
+    // Remove initial loading animation
     $(".trainer-item").css("animation", "none");
   });
 })(jQuery);

@@ -1,7 +1,7 @@
 <?php
 /**
  * Single Program Template Content
- * 训练项目单页模板内容
+ * Single training program template content
  * 
  * @package HelloElementor
  * @since 1.0.0
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-// 加载样式和脚本
+// Enqueue styles and scripts
 wp_enqueue_style( 'single-program-style', get_template_directory_uri() . '/custom-templates/single-program/style.css', array(), '1.0.1' );
 wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/custom-templates/single-program/script.js', array( 'jquery' ), '1.0.1', true );
 
@@ -24,25 +24,25 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
     while ( have_posts() ) :
         the_post();
         
-        // 获取自定义字段
+        // Get custom fields
         $price = get_post_meta( get_the_ID(), '_program_price', true );
         $duration = get_post_meta( get_the_ID(), '_program_duration', true );
         $difficulty = get_post_meta( get_the_ID(), '_program_difficulty', true );
         $max_students = get_post_meta( get_the_ID(), '_program_max_students', true );
         $custom_image_id = get_post_meta( get_the_ID(), '_program_custom_image', true );
         
-        // 获取分类
+        // Get categories
         $categories = get_the_terms( get_the_ID(), 'program_category' );
         
-        // 难度标签
+        // Difficulty labels
         $difficulty_labels = array(
-            'beginner' => '初级',
-            'intermediate' => '中级',
-            'advanced' => '高级',
+            'beginner' => 'Beginner',
+            'intermediate' => 'Intermediate',
+            'advanced' => 'Advanced',
         );
         $difficulty_label = isset( $difficulty_labels[ $difficulty ] ) ? $difficulty_labels[ $difficulty ] : '';
         
-        // 获取图片
+        // Get image
         $image_url = '';
         if ( $custom_image_id ) {
             $image_url = wp_get_attachment_image_url( $custom_image_id, 'full' );
@@ -53,22 +53,22 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
         
         <article id="post-<?php the_ID(); ?>" <?php post_class( 'program-single' ); ?>>
             
-            <!-- 返回按钮 -->
+            <!-- Back Button -->
             <div class="program-back-button">
                 <a href="javascript:history.back()" class="back-link">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    返回列表
+                    Back to List
                 </a>
             </div>
             
-            <!-- 头部横幅 -->
+            <!-- Hero Banner -->
             <div class="program-hero" <?php if ( $image_url ) echo 'style="background-image: url(' . esc_url( $image_url ) . ');"'; ?>>
                 <div class="program-hero-overlay">
                     <div class="program-hero-content">
                         
-                        <!-- 分类和难度 -->
+                        <!-- Categories and Difficulty -->
                         <div class="program-meta-badges">
                             <?php if ( $categories && ! is_wp_error( $categories ) ) : ?>
                                 <?php foreach ( $categories as $category ) : ?>
@@ -85,10 +85,10 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                             <?php endif; ?>
                         </div>
                         
-                        <!-- 标题 -->
+                        <!-- Title -->
                         <h1 class="program-title"><?php the_title(); ?></h1>
                         
-                        <!-- 摘要 -->
+                        <!-- Excerpt -->
                         <?php if ( has_excerpt() ) : ?>
                             <div class="program-excerpt">
                                 <?php the_excerpt(); ?>
@@ -99,17 +99,17 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                 </div>
             </div>
             
-            <!-- 主要内容区 -->
+            <!-- Main Content Area -->
             <div class="program-container">
                 
-                <!-- 信息卡片 -->
+                <!-- Info Cards -->
                 <div class="program-info-cards">
                     
                     <?php if ( $price ) : ?>
                         <div class="info-card info-price">
                             <div class="info-icon">💰</div>
                             <div class="info-content">
-                                <div class="info-label">价格</div>
+                                <div class="info-label">Price</div>
                                 <div class="info-value">NT$ <?php echo number_format( $price ); ?></div>
                             </div>
                         </div>
@@ -119,7 +119,7 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                         <div class="info-card info-duration">
                             <div class="info-icon">⏱️</div>
                             <div class="info-content">
-                                <div class="info-label">时长</div>
+                                <div class="info-label">Duration</div>
                                 <div class="info-value"><?php echo esc_html( $duration ); ?></div>
                             </div>
                         </div>
@@ -129,8 +129,8 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                         <div class="info-card info-students">
                             <div class="info-icon">👥</div>
                             <div class="info-content">
-                                <div class="info-label">人数限制</div>
-                                <div class="info-value">最多 <?php echo esc_html( $max_students ); ?> 人</div>
+                                <div class="info-label">Max Students</div>
+                                <div class="info-value">Up to <?php echo esc_html( $max_students ); ?> students</div>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -138,26 +138,26 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                     <div class="info-card info-date">
                         <div class="info-icon">📅</div>
                         <div class="info-content">
-                            <div class="info-label">发布日期</div>
+                            <div class="info-label">Published</div>
                             <div class="info-value"><?php echo get_the_date(); ?></div>
                         </div>
                     </div>
                     
                 </div>
                 
-                <!-- 内容区 -->
+                <!-- Content Area -->
                 <div class="program-content-wrapper">
                     
-                    <!-- 左侧主要内容 -->
+                    <!-- Left Side Main Content -->
                     <div class="program-main-content">
                         <div class="program-content">
                             <?php the_content(); ?>
                         </div>
                         
                         <?php
-                        // 分页链接（如果内容使用了 <!--nextpage--> 分页）
+                        // Pagination links (if content uses <!--nextpage--> pagination)
                         wp_link_pages( array(
-                            'before' => '<div class="page-links"><span class="page-links-title">页面：</span>',
+                            'before' => '<div class="page-links"><span class="page-links-title">Pages:</span>',
                             'after'  => '</div>',
                             'link_before' => '<span>',
                             'link_after'  => '</span>',
@@ -165,27 +165,27 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                         ?>
                     </div>
                     
-                    <!-- 右侧边栏 -->
+                    <!-- Right Sidebar -->
                     <aside class="program-sidebar">
                         
-                        <!-- CTA 卡片 -->
+                        <!-- CTA Card -->
                         <div class="sidebar-card cta-card">
-                            <h3>立即报名</h3>
-                            <p>准备好开始你的健身之旅了吗？</p>
+                            <h3>Enroll Now</h3>
+                            <p>Ready to start your fitness journey?</p>
                             
                             <?php if ( $price ) : ?>
                                 <div class="cta-price">
-                                    <span class="price-label">仅需</span>
+                                    <span class="price-label">Only</span>
                                     <span class="price-value">NT$ <?php echo number_format( $price ); ?></span>
                                 </div>
                             <?php endif; ?>
                             
                             <?php
-                            // 获取关联的 WooCommerce 产品 ID
+                            // Get linked WooCommerce product ID
                             $product_id = get_post_meta( get_the_ID(), '_program_product_id', true );
                             
                             if ( $product_id && function_exists( 'wc_get_checkout_url' ) ) :
-                                // 生成添加到购物车并跳转到结账的链接
+                                // Generate add to cart and redirect to checkout link
                                 $checkout_url = add_query_arg( array(
                                     'add-to-cart' => $product_id,
                                     'quantity' => 1
@@ -195,27 +195,27 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                         <path d="M10 5V15M5 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                     </svg>
-                                    立即报名
+                                    Enroll Now
                                 </a>
                             <?php else : ?>
-                                <button class="cta-button" onclick="alert('此项目暂未开放报名，请联系我们获取更多信息。')">
+                                <button class="cta-button" onclick="alert('This program is not currently open for enrollment. Please contact us for more information.')">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                         <path d="M10 5V15M5 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                     </svg>
-                                    立即报名
+                                    Enroll Now
                                 </button>
                             <?php endif; ?>
                             
                             <div class="cta-features">
-                                <div class="feature-item">✓ 专业教练指导</div>
-                                <div class="feature-item">✓ 个性化训练计划</div>
-                                <div class="feature-item">✓ 全程跟踪支持</div>
+                                <div class="feature-item">✓ Professional Coaching</div>
+                                <div class="feature-item">✓ Personalized Training Plan</div>
+                                <div class="feature-item">✓ Full Progress Support</div>
                             </div>
                         </div>
                         
-                        <!-- 分享卡片 -->
+                        <!-- Share Card -->
                         <div class="sidebar-card share-card">
-                            <h3>分享项目</h3>
+                            <h3>Share Program</h3>
                             <div class="share-buttons">
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode( get_permalink() ); ?>" target="_blank" class="share-btn share-facebook">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -234,7 +234,7 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                                         <path d="M8 12a4 4 0 005.657 0l4-4A4 4 0 1012 2.343l-1.415 1.414" stroke-width="2" stroke-linecap="round"/>
                                         <path d="M12 8a4 4 0 00-5.657 0l-4 4A4 4 0 007.999 17.657l1.414-1.414" stroke-width="2" stroke-linecap="round"/>
                                     </svg>
-                                    复制链接
+                                    Copy Link
                                 </button>
                             </div>
                         </div>
@@ -247,17 +247,17 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
             
         </article>
         
-        <!-- 相关项目 -->
+        <!-- Related Programs -->
         <?php
-        // 第1步：准备查询条件
+        // Step 1: Prepare query conditions
         $related_args = array(
-            'post_type' => 'program',                    // 只查询训练项目
-            'posts_per_page' => 3,                       // 显示3个推荐
-            'post__not_in' => array( get_the_ID() ),    // 排除当前项目
-            'orderby' => 'rand',                         // 随机排序
+            'post_type' => 'program',                    // Only query training programs
+            'posts_per_page' => 3,                       // Show 3 recommendations
+            'post__not_in' => array( get_the_ID() ),    // Exclude current program
+            'orderby' => 'rand',                         // Random order
         );
         
-        // 第2步：如果当前项目有分类，优先推荐同类项目
+        // Step 2: If current program has categories, prioritize same category programs
         if ( $categories && ! is_wp_error( $categories ) ) {
             $category_ids = wp_list_pluck( $categories, 'term_id' );
             $related_args['tax_query'] = array(
@@ -269,31 +269,31 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
             );
         }
         
-        // 第3步：执行数据库查询
+        // Step 3: Execute database query
         $related_query = new WP_Query( $related_args );
         
-        // 第4步：如果找到相关项目，显示推荐区块
+        // Step 4: If related programs found, display recommendations section
         if ( $related_query->have_posts() ) : 
             ?>
             
             <section class="related-programs">
                 <div class="program-container">
-                    <h2 class="section-title">相关训练项目</h2>
+                    <h2 class="section-title">Related Training Programs</h2>
                     
                     <div class="related-programs-grid">
                         
                         <?php 
-                        // 循环显示每个推荐项目
+                        // Loop through each recommended program
                         while ( $related_query->have_posts() ) : $related_query->the_post(); 
                             ?>
                             
                             <?php
-                            // 获取项目的自定义数据
+                            // Get program custom data
                             $rel_price = get_post_meta( get_the_ID(), '_program_price', true );
                             $rel_difficulty = get_post_meta( get_the_ID(), '_program_difficulty', true );
                             $rel_custom_image_id = get_post_meta( get_the_ID(), '_program_custom_image', true );
                             
-                            // 获取项目图片（优先自定义图片，其次特色图片）
+                            // Get program image (custom image first, then featured image)
                             $rel_image_url = '';
                             if ( $rel_custom_image_id ) {
                                 $rel_image_url = wp_get_attachment_image_url( $rel_custom_image_id, 'medium' );
@@ -302,16 +302,16 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                             }
                             ?>
                             
-                            <!-- 单个推荐项目卡片 -->
+                            <!-- Single Recommended Program Card -->
                             <article class="related-program-card">
                                 
                                 <?php if ( $rel_image_url ) : ?>
-                                    <!-- 项目图片区 -->
+                                    <!-- Program Image Area -->
                                     <div class="related-program-image" style="background-image: url(<?php echo esc_url( $rel_image_url ); ?>);">
                                         <a href="<?php the_permalink(); ?>"></a>
                                         
                                         <?php if ( $rel_difficulty ) : ?>
-                                            <!-- 难度徽章 -->
+                                            <!-- Difficulty Badge -->
                                             <span class="difficulty-badge difficulty-<?php echo esc_attr( $rel_difficulty ); ?>">
                                                 <?php echo isset( $difficulty_labels[ $rel_difficulty ] ) ? $difficulty_labels[ $rel_difficulty ] : ''; ?>
                                             </span>
@@ -320,7 +320,7 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
                                     </div>
                                 <?php endif; ?>
                                 
-                                <!-- 项目信息区 -->
+                                <!-- Program Info Area -->
                                 <div class="related-program-content">
                                     <h3>
                                         <a href="<?php the_permalink(); ?>">
@@ -346,7 +346,7 @@ wp_enqueue_script( 'single-program-script', get_template_directory_uri() . '/cus
         <?php 
         endif; 
         
-        // 第5步：重置文章数据，避免影响其他部分
+        // Step 5: Reset post data to avoid affecting other sections
         wp_reset_postdata(); 
         ?>
         

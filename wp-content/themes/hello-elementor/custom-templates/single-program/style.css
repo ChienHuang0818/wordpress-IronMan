@@ -1,13 +1,13 @@
 /**
  * Single Program Page Styles
- * 训练项目单页样式
+ * Single training program page styles
  * 
  * @package HelloElementor
  * @since 1.0.0
  */
 
 /* ========================================
-   全局设置
+   Global Settings
 ======================================== */
 
 .single-program-page {
@@ -22,7 +22,7 @@
 }
 
 /* ========================================
-   返回按钮
+   Back Button
 ======================================== */
 
 .program-back-button {
@@ -60,7 +60,7 @@
 }
 
 /* ========================================
-   头部横幅
+   Hero Banner
 ======================================== */
 
 .program-hero {
@@ -142,7 +142,7 @@
 }
 
 /* ========================================
-   信息卡片
+   Info Cards
 ======================================== */
 
 .program-info-cards {
@@ -196,7 +196,7 @@
 }
 
 /* ========================================
-   内容区域
+   Content Area
 ======================================== */
 
 .program-content-wrapper {
@@ -268,7 +268,7 @@
   border-radius: 0 8px 8px 0;
 }
 
-/* 分页链接 */
+/* Pagination Links */
 .page-links {
   margin-top: 2em;
   padding-top: 2em;
@@ -300,7 +300,7 @@
 }
 
 /* ========================================
-   侧边栏
+   Sidebar
 ======================================== */
 
 .program-sidebar {
@@ -322,7 +322,7 @@
   color: #1a1a1a;
 }
 
-/* CTA 卡片 */
+/* CTA Card */
 .cta-card {
   background: linear-gradient(135deg, #1a1a1a 0%, #e63946 100%);
   color: white;
@@ -395,7 +395,7 @@
   opacity: 0.95;
 }
 
-/* 分享卡片 */
+/* Share Card */
 .share-card p {
   color: #666;
   margin: 0 0 20px;
@@ -442,7 +442,7 @@
 }
 
 /* ========================================
-   相关项目
+   Related Programs
 ======================================== */
 
 .related-programs {
@@ -532,10 +532,10 @@
 }
 
 /* ========================================
-   响应式设计
+   Responsive Design
 ======================================== */
 
-/* 平板 */
+/* Tablet */
 @media (max-width: 992px) {
   .program-title {
     font-size: 2.5rem;
@@ -560,7 +560,7 @@
   }
 }
 
-/* 手机 */
+/* Mobile */
 @media (max-width: 768px) {
   .program-hero {
     height: 400px;
@@ -596,7 +596,7 @@
   }
 }
 
-/* 小屏手机 */
+/* Small Mobile */
 @media (max-width: 480px) {
   .program-title {
     font-size: 1.6rem;
@@ -625,7 +625,7 @@
 }
 
 /* ========================================
-   打印样式
+   Print Styles
 ======================================== */
 
 @media print {

@@ -6,7 +6,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+	exit; 
 }
 
 define( 'HELLO_ELEMENTOR_VERSION', '3.4.4' );
@@ -268,51 +268,52 @@ if ( ! function_exists( 'hello_elementor_body_open' ) ) {
 	}
 }
 
-// 添加自定義 Header JavaScript (手機版導航切換功能)
-add_action( 'wp_enqueue_scripts', function() {
-	wp_enqueue_script(
-		'custom-header-js',
-		get_template_directory_uri() . '/custom-templates/header/custom-header.js',
-		[], // 不依賴其他腳本
-		HELLO_ELEMENTOR_VERSION,
-		true // 在頁面底部載入
-	);
-}, 25);
-
 // Header Template
 add_action( 'wp_body_open', function() {
-	// 從自定義模板目錄載入
+	// Load custom template directory
 	$header_template = get_template_directory() . '/custom-templates/header/custom-header.php';
 	if ( file_exists( $header_template ) ) {
 		include $header_template;
 	}
 }, 5);
 
-// 載入 Program List 功能
+// Custom Header JavaScript (mobile navigation toggle)
+add_action( 'wp_enqueue_scripts', function() {
+	wp_enqueue_script(
+		'custom-header-js',
+		get_template_directory_uri() . '/custom-templates/header/custom-header.js',
+		[], // Not dependent on other scripts
+		HELLO_ELEMENTOR_VERSION,
+		true // Load at the bottom of the page
+	);
+}, 25);
+
+
+// Load Program List feature
 $program_list_feature = get_template_directory() . '/custom-features/program-list/program-list-feature.php';
 if ( file_exists( $program_list_feature ) ) {
 	require_once $program_list_feature;
 }
 
-// 載入 Trainer List 功能
+// Load Trainer List feature
 $trainer_list_feature = get_template_directory() . '/custom-features/trainer-list/trainer-list-feature.php';
 if ( file_exists( $trainer_list_feature ) ) {
 	require_once $trainer_list_feature;
 }
 
-// 載入 Meal Plan Generator 功能
+// Load Meal Plan Generator feature
 $meal_plan_generator = get_template_directory() . '/custom-features/meal-plan-generator/meal-plan-generator.php';
 if ( file_exists( $meal_plan_generator ) ) {
 	require_once $meal_plan_generator;
 }
 
-// 自動創建 AI Menu 頁面（如果不存在）
+// Create AI Menu page automatically (if not exists)
 function create_ai_menu_page() {
-	// 檢查頁面是否已存在
+	// Check if page already exists
 	$page = get_page_by_path( 'ai-menu' );
 	
 	if ( ! $page ) {
-		// 創建新頁面
+		// Create new page
 		$page_data = array(
 			'post_title'    => 'AI Menu',
 			'post_content'  => '[meal_plan_form]',
@@ -327,203 +328,21 @@ function create_ai_menu_page() {
 		wp_insert_post( $page_data );
 	}
 }
-// 在主題啟用時執行一次
+// Run once when theme is activated
 add_action( 'after_setup_theme', 'create_ai_menu_page' );
 
-// 自動創建 Register 頁面（如果不存在）
-function create_register_page() {
-	// 檢查頁面是否已存在
-	$page = get_page_by_path( 'register' );
-	
-	if ( ! $page ) {
-		// 創建新頁面
-		$page_data = array(
-			'post_title'    => 'Register',
-			'post_content'  => '<!-- wp:template-part {"slug":"register"} /-->',
-			'post_status'   => 'publish',
-			'post_type'     => 'page',
-			'post_name'     => 'register',
-			'post_author'   => 1,
-			'page_template' => 'register-template.php',
-			'comment_status' => 'closed',
-			'ping_status'   => 'closed',
-		);
-		
-		wp_insert_post( $page_data );
-	}
-}
-add_action( 'after_setup_theme', 'create_register_page' );
-
-// 註冊頁面模板
-function register_custom_page_templates( $templates ) {
-	$templates['register-template.php'] = 'Register Template';
-	return $templates;
-}
-add_filter( 'theme_page_templates', 'register_custom_page_templates' );
-
-// 加載註冊頁面模板
-function load_register_template( $template ) {
-	if ( is_page_template( 'register-template.php' ) || is_page( 'register' ) ) {
-		$new_template = get_template_directory() . '/custom-templates/register/template.php';
-		if ( file_exists( $new_template ) ) {
-			return $new_template;
-		}
-	}
-	return $template;
-}
-add_filter( 'template_include', 'load_register_template', 99 );
-
-// AJAX: 檢查用戶名是否可用
-add_action( 'wp_ajax_check_username', 'check_username_availability' );
-add_action( 'wp_ajax_nopriv_check_username', 'check_username_availability' );
-function check_username_availability() {
-	check_ajax_referer( 'custom_register_nonce', 'nonce' );
-	
-	$username = sanitize_user( $_POST['username'] );
-	
-	if ( username_exists( $username ) ) {
-		wp_send_json_error( array(
-			'message' => '此用户名已被使用'
-		) );
-	}
-	
-	wp_send_json_success( array(
-		'message' => '用户名可用'
-	) );
+// Register Page Functions
+$register_functions = get_template_directory() . '/custom-templates/register/register-functions.php';
+if ( file_exists( $register_functions ) ) {
+	require_once $register_functions;
 }
 
-// AJAX: 檢查郵箱是否可用
-add_action( 'wp_ajax_check_email', 'check_email_availability' );
-add_action( 'wp_ajax_nopriv_check_email', 'check_email_availability' );
-function check_email_availability() {
-	check_ajax_referer( 'custom_register_nonce', 'nonce' );
-	
-	$email = sanitize_email( $_POST['email'] );
-	
-	if ( email_exists( $email ) ) {
-		wp_send_json_error( array(
-			'message' => '此邮箱已被注册'
-		) );
-	}
-	
-	wp_send_json_success( array(
-		'message' => '邮箱可用'
-	) );
-}
-
-// AJAX: 用戶註冊處理
-add_action( 'wp_ajax_custom_register_user', 'handle_custom_registration' );
-add_action( 'wp_ajax_nopriv_custom_register_user', 'handle_custom_registration' );
-function handle_custom_registration() {
-	check_ajax_referer( 'custom_register_nonce', 'nonce' );
-	
-	// 驗證並清理輸入數據
-	$username  = sanitize_user( $_POST['username'] );
-	$email     = sanitize_email( $_POST['email'] );
-	$password  = $_POST['password']; // 不要清理密碼，保持原樣
-	$first_name = sanitize_text_field( $_POST['first_name'] );
-	$last_name  = sanitize_text_field( $_POST['last_name'] );
-	$gender     = sanitize_text_field( $_POST['gender'] );
-	$fitness_goal = sanitize_text_field( $_POST['fitness_goal'] );
-	$subscribe  = intval( $_POST['subscribe_newsletter'] );
-	
-	// 驗證必填字段
-	if ( empty( $username ) || empty( $email ) || empty( $password ) ) {
-		wp_send_json_error( array(
-			'message' => '請填寫所有必填字段'
-		) );
-	}
-	
-	// 驗證用戶名格式
-	if ( ! preg_match( '/^[a-zA-Z0-9_]+$/', $username ) ) {
-		wp_send_json_error( array(
-			'message' => '用戶名只能包含字母、數字和下劃線'
-		) );
-	}
-	
-	// 驗證用戶名長度
-	if ( strlen( $username ) < 3 ) {
-		wp_send_json_error( array(
-			'message' => '用戶名至少需要 3 個字符'
-		) );
-	}
-	
-	// 驗證郵箱格式
-	if ( ! is_email( $email ) ) {
-		wp_send_json_error( array(
-			'message' => '請輸入有效的電子郵箱地址'
-		) );
-	}
-	
-	// 驗證密碼長度
-	if ( strlen( $password ) < 8 ) {
-		wp_send_json_error( array(
-			'message' => '密碼至少需要 8 個字符'
-		) );
-	}
-	
-	// 檢查用戶名是否已存在
-	if ( username_exists( $username ) ) {
-		wp_send_json_error( array(
-			'message' => '此用戶名已被使用'
-		) );
-	}
-	
-	// 檢查郵箱是否已被註冊
-	if ( email_exists( $email ) ) {
-		wp_send_json_error( array(
-			'message' => '此郵箱已被註冊'
-		) );
-	}
-	
-	// 創建用戶
-	$user_id = wp_create_user( $username, $password, $email );
-	
-	if ( is_wp_error( $user_id ) ) {
-		wp_send_json_error( array(
-			'message' => '註冊失敗：' . $user_id->get_error_message()
-		) );
-	}
-	
-	// 更新用戶資料
-	wp_update_user( array(
-		'ID'         => $user_id,
-		'first_name' => $first_name,
-		'last_name'  => $last_name,
-		'role'       => 'customer', // WooCommerce 客戶角色
-	) );
-	
-	// 保存自定義字段
-	if ( $gender ) {
-		update_user_meta( $user_id, 'gender', $gender );
-	}
-	if ( $fitness_goal ) {
-		update_user_meta( $user_id, 'fitness_goal', $fitness_goal );
-	}
-	if ( $subscribe ) {
-		update_user_meta( $user_id, 'newsletter_subscription', 1 );
-	}
-	
-	// 自動登入用戶
-	wp_set_current_user( $user_id );
-	wp_set_auth_cookie( $user_id );
-	
-	// 發送歡迎郵件（可選）
-	wp_new_user_notification( $user_id, null, 'user' );
-	
-	// 返回成功響應
-	wp_send_json_success( array(
-		'message' => '註冊成功！正在跳轉...',
-		'redirect' => wc_get_page_permalink( 'myaccount' ) // 跳轉到我的帳戶頁面
-	) );
-}
-
-// 添加您的 WooCommerce 自定义样式载入代码
+// Custom WooCommerce Style Loader
 add_action( 'wp_enqueue_scripts', function() {
-	// 先確保主題樣式載入
+	// Ensure theme styles are loaded
 	wp_enqueue_style( 'hello-style', get_stylesheet_uri(), [], null );
   
-	// 再載入我們的 WooCommerce 客製樣式
+	// Custom WooCommerce Style
 	wp_enqueue_style(
 	  'gym-woocommerce-style',
 	  get_stylesheet_directory_uri() . '/css/woocommerce-custom.css/style.css',
@@ -532,6 +351,11 @@ add_action( 'wp_enqueue_scripts', function() {
 	);
   }, 20);
 
+// Custom Welcome Shortcode
+$welcome_shortcode = get_template_directory() . '/custom-templates/welcome/welcome-shortcode.php';
+if ( file_exists( $welcome_shortcode ) ) {
+	require_once $welcome_shortcode;
+}
 
 require HELLO_THEME_PATH . '/theme.php';
 

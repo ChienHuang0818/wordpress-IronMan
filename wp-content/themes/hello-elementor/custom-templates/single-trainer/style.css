@@ -1,13 +1,13 @@
 /**
  * Single Trainer Page Styles
- * 教练详情页样式 - 黑红配色
+ * Trainer Detail Page Styles - Black & Red Theme
  * 
  * @package HelloElementor
  * @since 1.0.0
  */
 
 /* ============================================
-   全局样式
+   Global Styles
    ============================================ */
 .single-trainer-page {
   background: #ffffff;
@@ -21,7 +21,7 @@
 }
 
 /* ============================================
-   Hero Section - 英雄区域
+   Hero Section
    ============================================ */
 .trainer-hero {
   position: relative;
@@ -152,7 +152,7 @@
   font-weight: 500;
 }
 
-/* 向下滚动指示器 */
+/* Scroll Down Indicator */
 .scroll-indicator {
   position: absolute;
   bottom: 30px;
@@ -185,7 +185,7 @@
 }
 
 /* ============================================
-   主要内容区域
+   Main Content Area
    ============================================ */
 .trainer-main-content {
   padding: 60px 0;
@@ -198,7 +198,7 @@
 }
 
 /* ============================================
-   信息卡片
+   Info Cards
    ============================================ */
 .info-cards {
   display: grid;
@@ -263,7 +263,7 @@
 }
 
 /* ============================================
-   教练描述内容
+   Trainer Description Content
    ============================================ */
 .trainer-description {
   background: white;
@@ -334,7 +334,7 @@
   border-bottom-color: #e63946;
 }
 
-/* 无内容时的默认消息 */
+/* Default Message When No Content */
 .no-content-message {
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   border-left: 4px solid #e63946;
@@ -389,7 +389,7 @@
 }
 
 /* ============================================
-   相关教练推荐
+   Related Trainers
    ============================================ */
 .related-trainers {
   background: white;
@@ -496,7 +496,7 @@
 }
 
 /* ============================================
-   侧边栏
+   Sidebar
    ============================================ */
 .trainer-sidebar {
   position: relative;
@@ -526,7 +526,7 @@
   border-bottom: 2px solid #e63946;
 }
 
-/* 社交媒体链接 */
+/* Social Media Links */
 .social-links {
   display: flex;
   flex-direction: column;
@@ -575,7 +575,7 @@
   color: white;
 }
 
-/* CTA按钮 */
+/* CTA Buttons */
 .cta-description {
   color: #666;
   font-size: 15px;
@@ -625,7 +625,7 @@
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
 }
 
-/* 分享按钮 */
+/* Share Buttons */
 .share-buttons {
   display: flex;
   gap: 10px;
@@ -669,7 +669,7 @@
 }
 
 /* ============================================
-   阅读进度条
+   Reading Progress Bar
    ============================================ */
 .reading-progress {
   position: fixed;
@@ -689,7 +689,7 @@
 }
 
 /* ============================================
-   动画
+   Animations
    ============================================ */
 @keyframes fadeInUp {
   from {
@@ -726,7 +726,7 @@
 }
 
 /* ============================================
-   响应式设计
+   Responsive Design
    ============================================ */
 @media (max-width: 992px) {
   .content-wrapper {
@@ -833,7 +833,7 @@
 }
 
 /* ============================================
-   打印样式
+   Print Styles
    ============================================ */
 @media print {
   .trainer-sidebar,

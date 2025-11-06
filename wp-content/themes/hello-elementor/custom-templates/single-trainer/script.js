@@ -1,6 +1,6 @@
 /**
  * Single Trainer Page Scripts
- * 教练详情页交互脚本
+ * Trainer Detail Page Interactive Scripts
  *
  * @package HelloElementor
  * @since 1.0.0
@@ -10,7 +10,7 @@
   "use strict";
 
   // ============================================
-  // 页面加载完成后初始化
+  // Initialize after page load
   // ============================================
   $(document).ready(function () {
     initScrollIndicator();
@@ -23,7 +23,7 @@
   });
 
   // ============================================
-  // 向下滚动指示器
+  // Scroll Down Indicator
   // ============================================
   function initScrollIndicator() {
     $(".scroll-indicator").on("click", function () {
@@ -37,7 +37,7 @@
       );
     });
 
-    // 滚动时隐藏指示器
+    // Hide indicator when scrolling
     $(window).on("scroll", function () {
       if ($(window).scrollTop() > 100) {
         $(".scroll-indicator").fadeOut();
@@ -48,7 +48,7 @@
   }
 
   // ============================================
-  // 平滑滚动
+  // Smooth Scroll
   // ============================================
   function initSmoothScroll() {
     $('a[href^="#"]').on("click", function (e) {
@@ -70,10 +70,10 @@
   }
 
   // ============================================
-  // 滚动显示动画
+  // Scroll Reveal Animations
   // ============================================
   function initScrollAnimations() {
-    // 为需要动画的元素添加 reveal 类
+    // Add reveal class to elements that need animation
     const animateElements = [
       ".info-card",
       ".trainer-description",
@@ -85,7 +85,7 @@
       $(selector).addClass("reveal");
     });
 
-    // 使用 Intersection Observer API
+    // Use Intersection Observer API
     const observerOptions = {
       threshold: 0.1,
       rootMargin: "0px 0px -50px 0px",
@@ -106,7 +106,7 @@
   }
 
   // ============================================
-  // 固定侧边栏（粘性定位）
+  // Sticky Sidebar
   // ============================================
   function initStickyElements() {
     if ($(window).width() > 992) {
@@ -136,7 +136,7 @@
   }
 
   // ============================================
-  // 阅读进度条
+  // Reading Progress Bar
   // ============================================
   function initReadingProgress() {
     const progressBar = $(".reading-progress-bar");
@@ -153,13 +153,13 @@
   }
 
   // ============================================
-  // 社交分享功能
+  // Social Share Functionality
   // ============================================
   function initSocialShare() {
     const pageUrl = encodeURIComponent(window.location.href);
     const pageTitle = encodeURIComponent(document.title);
 
-    // Facebook 分享
+    // Facebook share
     $(".share-facebook").on("click", function (e) {
       e.preventDefault();
       const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
@@ -167,7 +167,7 @@
       trackShare("facebook");
     });
 
-    // Twitter 分享
+    // Twitter share
     $(".share-twitter").on("click", function (e) {
       e.preventDefault();
       const shareUrl = `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`;
@@ -175,7 +175,7 @@
       trackShare("twitter");
     });
 
-    // 社交链接点击追踪
+    // Social link click tracking
     $(".social-link").on("click", function () {
       const platform = $(this).data("platform");
       if (platform) {
@@ -186,7 +186,7 @@
   }
 
   // ============================================
-  // 打开分享窗口
+  // Open Share Window
   // ============================================
   function openShareWindow(url, title) {
     const width = 600;
@@ -202,10 +202,10 @@
   }
 
   // ============================================
-  // 追踪分享（可集成分析工具）
+  // Track Share (can integrate with analytics)
   // ============================================
   function trackShare(platform) {
-    // 如果有 Google Analytics
+    // If Google Analytics is available
     if (typeof gtag !== "undefined") {
       gtag("event", "share", {
         event_category: "Social",
@@ -214,39 +214,39 @@
       });
     }
 
-    // 如果有其他分析工具，在这里添加
+    // Add other analytics tools here if needed
     console.log(`Shared on ${platform}`);
   }
 
   // ============================================
-  // 复制链接功能
+  // Copy Link Functionality
   // ============================================
   function initCopyLink() {
     $(".share-copy").on("click", function (e) {
       e.preventDefault();
       const url = $(this).data("url") || window.location.href;
 
-      // 使用现代 Clipboard API
+      // Use modern Clipboard API
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard
           .writeText(url)
           .then(function () {
-            showCopyNotification("链接已复制到剪贴板！");
+            showCopyNotification("Link copied to clipboard!");
             trackShare("copy-link");
           })
           .catch(function (err) {
-            console.error("复制失败:", err);
+            console.error("Copy failed:", err);
             fallbackCopyToClipboard(url);
           });
       } else {
-        // 降级方案
+        // Fallback method
         fallbackCopyToClipboard(url);
       }
     });
   }
 
   // ============================================
-  // 复制到剪贴板的降级方案
+  // Fallback Copy to Clipboard Method
   // ============================================
   function fallbackCopyToClipboard(text) {
     const textArea = document.createElement("textarea");
@@ -260,24 +260,24 @@
     try {
       const successful = document.execCommand("copy");
       if (successful) {
-        showCopyNotification("链接已复制到剪贴板！");
+        showCopyNotification("Link copied to clipboard!");
         trackShare("copy-link");
       } else {
-        showCopyNotification("复制失败，请手动复制链接", "error");
+        showCopyNotification("Copy failed, please copy manually", "error");
       }
     } catch (err) {
-      console.error("复制失败:", err);
-      showCopyNotification("复制失败，请手动复制链接", "error");
+      console.error("Copy failed:", err);
+      showCopyNotification("Copy failed, please copy manually", "error");
     }
 
     document.body.removeChild(textArea);
   }
 
   // ============================================
-  // 显示复制通知
+  // Show Copy Notification
   // ============================================
   function showCopyNotification(message, type = "success") {
-    // 移除已存在的通知
+    // Remove existing notification
     $(".copy-notification").remove();
 
     const bgColor = type === "success" ? "#e63946" : "#666";
@@ -300,7 +300,7 @@
             </div>
         `);
 
-    // 添加动画样式
+    // Add animation styles
     if (!$("#copy-notification-styles").length) {
       $("head").append(`
                 <style id="copy-notification-styles">
@@ -330,7 +330,7 @@
 
     $("body").append(notification);
 
-    // 3秒后自动消失
+    // Auto dismiss after 3 seconds
     setTimeout(function () {
       notification.css("animation", "slideOutDown 0.3s ease");
       setTimeout(function () {
@@ -340,17 +340,17 @@
   }
 
   // ============================================
-  // 图片懒加载优化
+  // Image Lazy Loading Optimization
   // ============================================
   function initLazyLoading() {
     if ("loading" in HTMLImageElement.prototype) {
-      // 浏览器原生支持懒加载
+      // Browser native lazy loading support
       const images = document.querySelectorAll('img[loading="lazy"]');
       images.forEach((img) => {
         img.src = img.dataset.src || img.src;
       });
     } else {
-      // 使用 Intersection Observer 降级方案
+      // Fallback using Intersection Observer
       const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -369,7 +369,7 @@
   }
 
   // ============================================
-  // 图片灯箱效果（可选）
+  // Image Lightbox Effect (Optional)
   // ============================================
   function initImageLightbox() {
     const contentImages = $(".description-content img, .trainer-card-image img");
@@ -420,7 +420,7 @@
       $("body").append(lightbox);
       lightbox.fadeIn(300);
 
-      // 点击关闭
+      // Click to close
       lightbox.on("click", function (e) {
         if (e.target === this || $(e.target).hasClass("lightbox-close")) {
           lightbox.fadeOut(300, function () {
@@ -429,7 +429,7 @@
         }
       });
 
-      // ESC 键关闭
+      // ESC key to close
       $(document).on("keyup.lightbox", function (e) {
         if (e.key === "Escape") {
           lightbox.fadeOut(300, function () {
@@ -442,18 +442,18 @@
   }
 
   // ============================================
-  // 响应式调整
+  // Responsive Adjustments
   // ============================================
   $(window).on(
     "resize",
     debounce(function () {
-      // 重新初始化需要响应式调整的功能
+      // Reinitialize features that need responsive adjustments
       initStickyElements();
     }, 250)
   );
 
   // ============================================
-  // 防抖函数
+  // Debounce Function
   // ============================================
   function debounce(func, wait) {
     let timeout;
@@ -468,7 +468,7 @@
   }
 
   // ============================================
-  // 初始化可选功能
+  // Initialize Optional Features
   // ============================================
   initLazyLoading();
   initImageLightbox();

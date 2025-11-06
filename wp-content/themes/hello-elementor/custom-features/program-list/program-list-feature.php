@@ -1,7 +1,7 @@
 <?php
 /**
  * Program List Feature
- * 自定义课程/训练项目列表功能
+ * Custom training program list functionality
  * 
  * Shortcode: [program_list]
  * 
@@ -11,7 +11,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// 定义常量
+// Define constants
 define( 'PROGRAM_LIST_VER', '1.0.0' );
 define( 'PROGRAM_LIST_URL', get_template_directory_uri() . '/custom-features/program-list/' );
 define( 'PROGRAM_LIST_PATH', get_template_directory() . '/custom-features/program-list/' );
@@ -19,43 +19,43 @@ define( 'PROGRAM_LIST_PATH', get_template_directory() . '/custom-features/progra
 class Program_List_Feature {
     
     /**
-     * 构造函数
+     * Constructor
      */
     public function __construct() {
-        // 注册自定义文章类型
+        // Register custom post type
         add_action( 'init', [ $this, 'register_program_post_type' ] );
         
-        // 注册 shortcode
+        // Register shortcode
         add_action( 'init', [ $this, 'register_shortcode' ] );
         
-        // 载入资源
+        // Enqueue assets
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
         
-        // 添加自定义栏位
+        // Add custom meta boxes
         add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
         add_action( 'save_post', [ $this, 'save_meta_boxes' ] );
     }
 
     /**
-     * 注册自定义文章类型
+     * Register custom post type
      */
     public function register_program_post_type() {
         $labels = array(
-            'name'                  => '训练项目',
-            'singular_name'         => '项目',
-            'menu_name'             => '训练项目',
-            'add_new'               => '新增项目',
-            'add_new_item'          => '新增训练项目',
-            'edit_item'             => '编辑项目',
-            'new_item'              => '新项目',
-            'view_item'             => '查看项目',
-            'view_items'            => '查看项目',
-            'search_items'          => '搜索项目',
-            'all_items'             => '所有项目',
-            'archives'              => '项目归档',
-            'attributes'            => '项目属性',
-            'insert_into_item'      => '插入到项目',
-            'uploaded_to_this_item' => '上传到此项目',
+            'name'                  => 'Training Programs',
+            'singular_name'         => 'Program',
+            'menu_name'             => 'Training Programs',
+            'add_new'               => 'Add New',
+            'add_new_item'          => 'Add New Program',
+            'edit_item'             => 'Edit Program',
+            'new_item'              => 'New Program',
+            'view_item'             => 'View Program',
+            'view_items'            => 'View Programs',
+            'search_items'          => 'Search Programs',
+            'all_items'             => 'All Programs',
+            'archives'              => 'Program Archives',
+            'attributes'            => 'Program Attributes',
+            'insert_into_item'      => 'Insert into program',
+            'uploaded_to_this_item' => 'Uploaded to this program',
         );
 
         $args = array(
@@ -72,23 +72,23 @@ class Program_List_Feature {
             'menu_position'       => 5,
             'menu_icon'           => 'dashicons-heart',
             'supports'            => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields' ),
-            'show_in_rest'        => true, // 支持 Gutenberg 编辑器
+            'show_in_rest'        => true, // Support Gutenberg editor
         );
 
         register_post_type( 'program', $args );
 
-        // 注册分类法
+        // Register taxonomy
         register_taxonomy(
             'program_category',
             'program',
             array(
                 'labels' => array(
-                    'name'          => '项目分类',
-                    'singular_name' => '分类',
-                    'search_items'  => '搜索分类',
-                    'all_items'     => '所有分类',
-                    'edit_item'     => '编辑分类',
-                    'add_new_item'  => '新增分类',
+                    'name'          => 'Program Categories',
+                    'singular_name' => 'Category',
+                    'search_items'  => 'Search Categories',
+                    'all_items'     => 'All Categories',
+                    'edit_item'     => 'Edit Category',
+                    'add_new_item'  => 'Add New Category',
                 ),
                 'hierarchical'      => true,
                 'show_in_rest'      => true,
@@ -99,17 +99,17 @@ class Program_List_Feature {
     }
 
     /**
-     * 注册 Shortcode
+     * Register shortcode
      */
     public function register_shortcode() {
         add_shortcode( 'program_list', [ $this, 'render_program_list' ] );
     }
 
     /**
-     * 载入 CSS 和 JavaScript
+     * Enqueue CSS and JavaScript
      */
     public function enqueue_assets() {
-        // 只在包含 shortcode 的页面载入
+        // Only load on pages with shortcode
         global $post;
         if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'program_list' ) ) {
             wp_enqueue_style(
@@ -127,7 +127,7 @@ class Program_List_Feature {
                 true
             );
 
-            // 传递数据给 JavaScript
+            // Pass data to JavaScript
             wp_localize_script( 'program-list-script', 'ProgramListConfig', array(
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
                 'nonce'   => wp_create_nonce( 'program_list_nonce' ),
@@ -136,36 +136,36 @@ class Program_List_Feature {
     }
 
     /**
-     * 添加自定义栏位
+     * Add custom meta boxes
      */
     public function add_meta_boxes() {
         add_meta_box(
             'program_details',
-            '项目详细信息',
+            'Program Details',
             [ $this, 'render_meta_box' ],
             'program',
             'normal',
             'high'
         );
         
-        // 加载媒体上传器
+        // Load media uploader
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
     }
     
     /**
-     * 加载后台脚本
+     * Enqueue admin scripts
      */
     public function enqueue_admin_scripts( $hook ) {
         global $post_type;
         
-        // 只在编辑 program 类型的文章时加载
+        // Only load when editing program post type
         if ( ( 'post.php' === $hook || 'post-new.php' === $hook ) && 'program' === $post_type ) {
             wp_enqueue_media();
         }
     }
 
     /**
-     * 渲染自定义栏位
+     * Render meta box
      */
     public function render_meta_box( $post ) {
         wp_nonce_field( 'program_meta_nonce', 'program_nonce' );
@@ -191,61 +191,61 @@ class Program_List_Feature {
         </style>
 
         <div class="program-meta-field">
-            <label>📸 项目图片</label>
+            <label>📸 Program Image</label>
             <div class="program-image-upload">
                 <input type="hidden" id="program_custom_image" name="program_custom_image" value="<?php echo esc_attr( $custom_image ); ?>" />
                 
                 <div class="program-image-preview" id="program-image-preview">
                     <?php if ( $custom_image ) : ?>
-                        <img src="<?php echo esc_url( wp_get_attachment_url( $custom_image ) ); ?>" alt="项目图片" />
+                        <img src="<?php echo esc_url( wp_get_attachment_url( $custom_image ) ); ?>" alt="Program image" />
                     <?php else : ?>
-                        <p style="color: #999;">还没有上传图片</p>
+                        <p style="color: #999;">No image uploaded yet</p>
                     <?php endif; ?>
                 </div>
                 
                 <button type="button" class="upload-btn" id="upload-program-image">
-                    <?php echo $custom_image ? '更换图片' : '上传图片'; ?>
+                    <?php echo $custom_image ? 'Change Image' : 'Upload Image'; ?>
                 </button>
                 
                 <?php if ( $custom_image ) : ?>
-                    <button type="button" class="remove-btn" id="remove-program-image">移除图片</button>
+                    <button type="button" class="remove-btn" id="remove-program-image">Remove Image</button>
                 <?php endif; ?>
             </div>
         </div>
 
         <div class="program-meta-field">
-            <label for="program_price">价格 (NT$)</label>
+            <label for="program_price">Price (NT$)</label>
             <input type="number" id="program_price" name="program_price" value="<?php echo esc_attr( $price ); ?>" placeholder="3000" />
         </div>
 
         <div class="program-meta-field">
-            <label for="program_duration">时长</label>
-            <input type="text" id="program_duration" name="program_duration" value="<?php echo esc_attr( $duration ); ?>" placeholder="例如：8周、3个月" />
+            <label for="program_duration">Duration</label>
+            <input type="text" id="program_duration" name="program_duration" value="<?php echo esc_attr( $duration ); ?>" placeholder="e.g., 8 weeks, 3 months" />
         </div>
 
         <div class="program-meta-field">
-            <label for="program_difficulty">难度等级</label>
+            <label for="program_difficulty">Difficulty Level</label>
             <select id="program_difficulty" name="program_difficulty">
-                <option value="">选择难度</option>
-                <option value="beginner" <?php selected( $difficulty, 'beginner' ); ?>>初级</option>
-                <option value="intermediate" <?php selected( $difficulty, 'intermediate' ); ?>>中级</option>
-                <option value="advanced" <?php selected( $difficulty, 'advanced' ); ?>>高级</option>
+                <option value="">Select Difficulty</option>
+                <option value="beginner" <?php selected( $difficulty, 'beginner' ); ?>>Beginner</option>
+                <option value="intermediate" <?php selected( $difficulty, 'intermediate' ); ?>>Intermediate</option>
+                <option value="advanced" <?php selected( $difficulty, 'advanced' ); ?>>Advanced</option>
             </select>
         </div>
 
         <div class="program-meta-field">
-            <label for="program_max_students">最大学员数</label>
+            <label for="program_max_students">Max Students</label>
             <input type="number" id="program_max_students" name="program_max_students" value="<?php echo esc_attr( $max_students ); ?>" placeholder="20" />
         </div>
 
         <div class="program-meta-field">
-            <label for="program_product_id">🛒 关联 WooCommerce 产品</label>
+            <label for="program_product_id">🛒 Link WooCommerce Product</label>
             <select id="program_product_id" name="program_product_id">
-                <option value="">选择产品（用于结账）</option>
+                <option value="">Select Product (for checkout)</option>
                 <?php
-                // 检查 WooCommerce 是否已激活
+                // Check if WooCommerce is active
                 if ( function_exists( 'wc_get_products' ) ) {
-                    // 获取所有 WooCommerce 产品
+                    // Get all WooCommerce products
                     $products = wc_get_products( array(
                         'limit' => -1,
                         'orderby' => 'title',
@@ -263,12 +263,12 @@ class Program_List_Feature {
                         );
                     }
                 } else {
-                    echo '<option value="">请先安装并激活 WooCommerce</option>';
+                    echo '<option value="">Please install and activate WooCommerce first</option>';
                 }
                 ?>
             </select>
             <p style="color: #666; font-size: 13px; margin-top: 5px;">
-                💡 选择此训练项目对应的 WooCommerce 产品，用户点击"立即报名"将跳转到结账页面
+                💡 Select the WooCommerce product for this training program. Users will be redirected to checkout when clicking "Enroll Now"
             </p>
         </div>
 
@@ -285,18 +285,18 @@ class Program_List_Feature {
                 }
                 
                 mediaUploader = wp.media({
-                    title: '选择项目图片',
-                    button: { text: '使用这张图片' },
+                    title: 'Select Program Image',
+                    button: { text: 'Use This Image' },
                     multiple: false
                 });
                 
                 mediaUploader.on('select', function() {
                     var attachment = mediaUploader.state().get('selection').first().toJSON();
                     $('#program_custom_image').val(attachment.id);
-                    $('#program-image-preview').html('<img src="' + attachment.url + '" alt="项目图片" />');
-                    $('#upload-program-image').text('更换图片');
+                    $('#program-image-preview').html('<img src="' + attachment.url + '" alt="Program image" />');
+                    $('#upload-program-image').text('Change Image');
                     if ($('#remove-program-image').length === 0) {
-                        $('#upload-program-image').after('<button type="button" class="remove-btn" id="remove-program-image">移除图片</button>');
+                        $('#upload-program-image').after('<button type="button" class="remove-btn" id="remove-program-image">Remove Image</button>');
                     }
                 });
                 
@@ -306,8 +306,8 @@ class Program_List_Feature {
             $(document).on('click', '#remove-program-image', function(e) {
                 e.preventDefault();
                 $('#program_custom_image').val('');
-                $('#program-image-preview').html('<p style="color: #999;">还没有上传图片</p>');
-                $('#upload-program-image').text('上传图片');
+                $('#program-image-preview').html('<p style="color: #999;">No image uploaded yet</p>');
+                $('#upload-program-image').text('Upload Image');
                 $(this).remove();
             });
         });
@@ -317,25 +317,25 @@ class Program_List_Feature {
     }
 
     /**
-     * 保存自定义栏位
+     * Save custom meta boxes
      */
     public function save_meta_boxes( $post_id ) {
-        // 检查 nonce
+        // Check nonce
         if ( ! isset( $_POST['program_nonce'] ) || ! wp_verify_nonce( $_POST['program_nonce'], 'program_meta_nonce' ) ) {
             return;
         }
 
-        // 检查自动保存
+        // Check autosave
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return;
         }
 
-        // 检查权限
+        // Check permissions
         if ( ! current_user_can( 'edit_post', $post_id ) ) {
             return;
         }
 
-        // 保存字段
+        // Save fields
         $fields = array( 'program_price', 'program_duration', 'program_difficulty', 'program_max_students', 'program_custom_image', 'program_product_id' );
         foreach ( $fields as $field ) {
             if ( isset( $_POST[ $field ] ) ) {
@@ -345,18 +345,18 @@ class Program_List_Feature {
     }
 
     /**
-     * 渲染课程列表
+     * Render program list
      */
     public function render_program_list( $atts ) {
-        // 处理 shortcode 参数
+        // Process shortcode attributes
         $atts = shortcode_atts( array(
-            'category'   => '',      // 特定分类
-            'limit'      => 12,      // 显示数量
-            'layout'     => 'grid',  // 布局类型: grid, list
-            'difficulty' => '',      // 难度筛选
+            'category'   => '',      // Specific category
+            'limit'      => 12,      // Number to display
+            'layout'     => 'grid',  // Layout type: grid, list
+            'difficulty' => '',      // Difficulty filter
         ), $atts );
 
-        // 查询参数
+        // Query parameters
         $args = array(
             'post_type'      => 'program',
             'posts_per_page' => intval( $atts['limit'] ),
@@ -365,7 +365,7 @@ class Program_List_Feature {
             'order'          => 'DESC',
         );
 
-        // 分类筛选
+        // Category filter
         if ( ! empty( $atts['category'] ) ) {
             $args['tax_query'] = array(
                 array(
@@ -376,7 +376,7 @@ class Program_List_Feature {
             );
         }
 
-        // 难度筛选
+        // Difficulty filter
         if ( ! empty( $atts['difficulty'] ) ) {
             $args['meta_query'] = array(
                 array(
@@ -388,7 +388,7 @@ class Program_List_Feature {
 
         $query = new WP_Query( $args );
 
-        // 开始输出缓冲
+        // Start output buffering
         ob_start();
         ?>
 
@@ -406,7 +406,7 @@ class Program_List_Feature {
                         $max_students = get_post_meta( get_the_ID(), '_program_max_students', true );
                         $custom_image_id = get_post_meta( get_the_ID(), '_program_custom_image', true );
                         
-                        // 优先使用自定义图片，其次使用特色图片
+                        // Use custom image first, then featured image
                         $has_image = false;
                         $image_html = '';
                         
@@ -431,12 +431,12 @@ class Program_List_Feature {
                                     </a>
                                 </div>
                             <?php else : ?>
-                                <!-- 没有图片时显示占位符 -->
+                                <!-- Show placeholder when no image available -->
                                 <div class="program-thumbnail program-no-image">
                                     <a href="<?php the_permalink(); ?>">
                                         <div class="placeholder-image">
                                             <span class="placeholder-icon">📋</span>
-                                            <span class="placeholder-text">训练项目</span>
+                                            <span class="placeholder-text">Training Program</span>
                                         </div>
                                     </a>
                                 </div>
@@ -446,9 +446,9 @@ class Program_List_Feature {
                                 <span class="program-difficulty-badge difficulty-<?php echo esc_attr( $difficulty ); ?>">
                                     <?php 
                                     $diff_labels = array(
-                                        'beginner' => '初级',
-                                        'intermediate' => '中级',
-                                        'advanced' => '高级',
+                                        'beginner' => 'Beginner',
+                                        'intermediate' => 'Intermediate',
+                                        'advanced' => 'Advanced',
                                     );
                                     echo isset( $diff_labels[ $difficulty ] ) ? $diff_labels[ $difficulty ] : $difficulty;
                                     ?>
@@ -486,13 +486,13 @@ class Program_List_Feature {
                                     <?php if ( $max_students ) : ?>
                                         <span class="program-meta-item program-students">
                                             <span class="meta-icon">👥</span>
-                                            最多 <?php echo esc_html( $max_students ); ?> 人
+                                            Max <?php echo esc_html( $max_students ); ?> students
                                         </span>
                                     <?php endif; ?>
                                 </div>
 
                                 <a href="<?php the_permalink(); ?>" class="program-button">
-                                    查看详情 →
+                                    View Details →
                                 </a>
                             </div>
 
@@ -502,7 +502,7 @@ class Program_List_Feature {
                 </div>
 
             <?php else : ?>
-                <p class="no-programs">目前没有可用的训练项目。</p>
+                <p class="no-programs">No training programs available at the moment.</p>
             <?php endif; ?>
 
             <?php wp_reset_postdata(); ?>
@@ -514,6 +514,6 @@ class Program_List_Feature {
     }
 }
 
-// 初始化功能
+// Initialize feature
 new Program_List_Feature();
 
